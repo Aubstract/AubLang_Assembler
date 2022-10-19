@@ -23,9 +23,6 @@ def main():
 
     code = assembler.assemble(code)
 
-    #print(assembler.jumpLabels)
-    #print(assembler.varLabels)
-
     schem.generateSchem(code)
 
 

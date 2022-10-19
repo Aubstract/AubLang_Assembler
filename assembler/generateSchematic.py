@@ -67,11 +67,12 @@ def generateSchem(code: list):
                     else:
                         schem.setBlock((x_coord, y_coord, z_coord), "minecraft:barrier")
                     colCount += 1
+                elif rowCount >= totalRows and rowCount < 32:
+                    schem.setBlock((x_coord, y_coord, z_coord), "minecraft:barrier")
                 else:
                     break
             colCount = 0
             rowCount += 1
-        rowCount += 1
     
     schem.save("C:/Users/Ben/AppData/Roaming/.minecraft/config/worldedit/schematics", "output", mcschematic.Version.JE_1_18_2)
 
