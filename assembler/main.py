@@ -2,10 +2,12 @@
 # By Aubrey Fields
 # Start date: 10/16/2022
 
+
 import codeCleaner
 import debugger
 import assembler
 import generateSchematic as schem
+
 
 def main():
 
@@ -23,7 +25,11 @@ def main():
 
     code = assembler.assemble(code)
 
+    debugger.debugMachineCode(code)
+
     schem.generateSchem(code)
+
+    printSummary(code)
 
 
 def fileParse(filePath: str) -> list:
@@ -36,5 +42,19 @@ def fileParse(filePath: str) -> list:
     file.close()
 
     return contents
+
+
+def printSummary(code: list):
+    """Prints a report on the program once it is assembled"""
+
+    print("\n---------------------successfully assembled---------------------\n")
+
+    print("Output file name: output.schem\n")
+
+    print(f"Program length: {len(code)} lines")
+    print(f"jumpLabel Dictionary:\n{assembler.jumpLabels}")
+    print(f"varLabel Dictionary:\n{assembler.varLabels}")
+
+    print("\n----------------------------------------------------------------\n")
 
 main()

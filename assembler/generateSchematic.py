@@ -1,5 +1,6 @@
 import mcschematic
 
+
 def generateSchem(code: list):
     """Generates a schematic file"""
 
@@ -75,5 +76,3 @@ def generateSchem(code: list):
             rowCount += 1
     
     schem.save("C:/Users/Ben/AppData/Roaming/.minecraft/config/worldedit/schematics", "output", mcschematic.Version.JE_1_18_2)
-
-    print("\ndone\n")

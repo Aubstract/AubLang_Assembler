@@ -42,6 +42,7 @@ def cleanCode(code: list) -> list: # Original function, later split into two so 
 
     return code
 
+
 def cleanLines(code: list) -> list:
     """Only cleans individual lines, it doesnt remove multi-line issues\n
        the reason is to preserve line numbers for the debugger"""

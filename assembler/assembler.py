@@ -1,8 +1,10 @@
 
 import dictionaries as dict
 
+
 jumpLabels = {}
 varLabels = {}
+
 
 def replaceLabels(code: list) -> list:
     """Replaces labels with literal values/addresses"""
