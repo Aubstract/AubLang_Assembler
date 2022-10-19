@@ -23,15 +23,10 @@ def main():
 
     code = assembler.assemble(code)
 
-    print(assembler.jumpLabels)
-    print(assembler.varLabels)
+    #print(assembler.jumpLabels)
+    #print(assembler.varLabels)
 
-    for line in code:
-        print(line)
-    
-    print(len(code))
-
-    schem.schem(code)
+    schem.generateSchem(code)
 
 
 def fileParse(filePath: str) -> list:
