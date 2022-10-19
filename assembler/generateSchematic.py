@@ -17,7 +17,7 @@ def generateSchem(code: list):
     DIM_Y = -13
 
     # The offsets of the schem corner from the player
-    X_OFFSET = 0 # -1
+    X_OFFSET = 0
     Y_OFFSET = -1
     Z_OFFSET = -1
 
