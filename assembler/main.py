@@ -23,7 +23,13 @@ def main():
 
     debugger.debugLiteral(code)
 
+    for line in code:
+        print(line)
+
     code = assembler.assemble(code)
+
+    for line in code:
+        print(line)
 
     debugger.debugMachineCode(code)
 

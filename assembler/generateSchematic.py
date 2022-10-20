@@ -13,14 +13,14 @@ def generateSchem(code: list):
         code[lineNum] = [*line]
 
     # Dimensions of program memory, in relative coords from the corner closest to the paste-location
-    DIM_Z = 35
-    DIM_X = -15
-    DIM_Y = -13
+    DIM_Z = 34
+    DIM_X = -14
+    DIM_Y = -12
 
     # The offsets of the schem corner from the player
-    X_OFFSET = 0
+    X_OFFSET = -1
     Y_OFFSET = -1
-    Z_OFFSET = -1
+    Z_OFFSET = 0
 
     # The step size (how many blocks between torches), disregarding direction
     Z_STEP_SIZE = 2
@@ -65,8 +65,10 @@ def generateSchem(code: list):
                 if rowCount < totalRows:
                     if code[rowCount][colCount] == '1':
                         schem.setBlock((x_coord, y_coord, z_coord), "minecraft:redstone_wall_torch[facing=west]")
+                        print(x_coord, y_coord, z_coord, "= 1")
                     else:
                         schem.setBlock((x_coord, y_coord, z_coord), "minecraft:barrier")
+                        print(x_coord, y_coord, z_coord, "= 0")
                     colCount += 1
                 elif rowCount >= totalRows and rowCount < 32:
                     schem.setBlock((x_coord, y_coord, z_coord), "minecraft:barrier")
