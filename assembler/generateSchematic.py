@@ -9,8 +9,14 @@ def generateSchem(code: list):
     totalRows = len(code)
 
     # Breaks each line into a list of chars
-    for lineNum, line in enumerate(code):
-        code[lineNum] = [*line]
+    for lineNum, lineElement in enumerate(code):
+
+        line = lineElement.line
+
+        code[lineNum].line = [*line]
+
+    # Direction that the torches face in memory
+    TORCH_DIRECTION = "west"
 
     # Dimensions of program memory, in relative coords from the corner closest to the paste-location
     DIM_Z = 34
@@ -63,12 +69,10 @@ def generateSchem(code: list):
         for x_coord in range(x_start, x_end, x_step):
             for z_coord in range(z_start, z_end, z_step):
                 if rowCount < totalRows:
-                    if code[rowCount][colCount] == '1':
-                        schem.setBlock((x_coord, y_coord, z_coord), "minecraft:redstone_wall_torch[facing=west]")
-                        print(x_coord, y_coord, z_coord, "= 1")
+                    if code[rowCount].line[colCount] == '1':
+                        schem.setBlock((x_coord, y_coord, z_coord), f"minecraft:redstone_wall_torch[facing={TORCH_DIRECTION}]")
                     else:
                         schem.setBlock((x_coord, y_coord, z_coord), "minecraft:barrier")
-                        print(x_coord, y_coord, z_coord, "= 0")
                     colCount += 1
                 elif rowCount >= totalRows and rowCount < 32:
                     schem.setBlock((x_coord, y_coord, z_coord), "minecraft:barrier")

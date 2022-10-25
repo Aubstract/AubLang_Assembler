@@ -14,22 +14,18 @@ def main():
     source = input("Paste the path to the source file: ")
 
     code = fileParse(source)
+
+    code = debugger.getCodeLines(code)
+    
     code = codeCleaner.cleanLines(code)
 
     debugger.debug(code)
 
-    code = codeCleaner.finishClean(code)
     code = assembler.replaceLabels(code)
 
     debugger.debugLiteral(code)
 
-    for line in code:
-        print(line)
-
     code = assembler.assemble(code)
-
-    for line in code:
-        print(line)
 
     debugger.debugMachineCode(code)
 
@@ -53,14 +49,11 @@ def fileParse(filePath: str) -> list:
 def printSummary(code: list):
     """Prints a report on the program once it is assembled"""
 
-    print("\n---------------------successfully assembled---------------------\n")
-
+    print("\n~~~~~~~~~~~~~~~~~~~~ successfully assembled ~~~~~~~~~~~~~~~~~~~~\n")
     print("Output file name: output.schem\n")
-
     print(f"Program length: {len(code)} lines")
     print(f"jumpLabel Dictionary:\n{assembler.jumpLabels}")
     print(f"varLabel Dictionary:\n{assembler.varLabels}")
-
-    print("\n----------------------------------------------------------------\n")
+    print("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n")
 
 main()

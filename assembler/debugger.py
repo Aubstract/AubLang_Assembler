@@ -5,9 +5,31 @@ MAX_PROGRAM_LEN = 32
 INSTRUCTION_WIDTH = 18 # number of bits per instruction
 
 
+class Line:
+    
+    def __init__(self, line: str, lineNum: int):
+        self.line = line
+        self.line_num = lineNum
+
+
+def getCodeLines(code: list) -> list:
+    """Takes a list of strings and creates a list of objects, each with two attributes:\n
+       - The line of code (str)\n
+       - The line number (int)\n
+       This allows the debugger to specify the line number in an error message"""
+
+    for lineNum, line in enumerate(code):
+        code[lineNum] = Line(line, lineNum)
+    
+    return code
+
+
 def debug(code: list):
     """Checks that the instructions are formatted correctly and have valid arguments"""
-    for lineNum, line in enumerate(code):
+    for element in code:
+
+        line = element.line
+        lineNum = element.line_num
 
         fields = line.split()
 
@@ -91,45 +113,48 @@ def debugLiteral(code: list):
     """Checks that the addresses are valid"""
 
     if len(code) > MAX_PROGRAM_LEN:
-        printError(invalidProgramLen())
+        printError(invalidProgramLen(len(code)))
 
-    for lineNum, line in enumerate(code):
+    for lineElement in code:
+
+        line = lineElement.line
+        lineNum = lineElement.line_num
         
         fields = line.split()
 
         if fields[0] in {"add","adc","sub","sbc","and","orr","xor","nnd","nor","xnr"}:
             for n in range(1, len(fields) - 1):
                 if not fields[n] in filter(inRegs, dict.addrDict):
-                    printError(invalidLitAddr(code, lineNum))
+                    printError(invalidLitAddr(line, lineNum))
             
         elif fields[0] in {"jgt","jet","jlt","jge"}:
             if not fields[1] in filter(inJmpAddr, dict.addrDict):
-                    printError(invalidLitAddr(code, lineNum))
+                    printError(invalidLitAddr(line, lineNum))
             for n in range(2, len(fields) - 1):
                 if not fields[n] in filter(inRegs, dict.addrDict):
-                    printError(invalidLitAddr(code, lineNum))
+                    printError(invalidLitAddr(line, lineNum))
 
         elif fields[0] == "jft":
             if not fields[1] in filter(inJmpAddr, dict.addrDict):
-                printError(invalidLitAddr(code, lineNum))
+                printError(invalidLitAddr(line, lineNum))
 
         elif fields[0] == "lit":
             if not fields[1] in filter(inAddrSpace, dict.addrDict):
-                printError(invalidLitAddr(code, lineNum))
+                printError(invalidLitAddr(line, lineNum))
 
         elif fields[0] in {"inc","dec","lsh","lsc"}:
            for n in range(1, len(fields) - 1):
                 if not fields[n] in filter(inRegs, dict.addrDict):
-                    printError(invalidLitAddr(code, lineNum))
+                    printError(invalidLitAddr(line, lineNum))
 
         elif fields[0] == "jmp":
             if not fields[1] in filter(inJmpAddr, dict.addrDict):
-                printError(invalidLitAddr(code, lineNum))
+                printError(invalidLitAddr(line, lineNum))
 
         elif fields[0] == "mov":
             for n in range(1, len(fields)):
                 if not fields[n] in filter(inAddrSpace, dict.addrDict):
-                    printError(invalidLitAddr(code, lineNum))
+                    printError(invalidLitAddr(line, lineNum))
 
 
 def debugMachineCode(code: list):
@@ -137,17 +162,21 @@ def debugMachineCode(code: list):
 
     if len(code) > MAX_PROGRAM_LEN:
         printError(invalidProgramLen())
-    for lineNum, line in enumerate(code):
+    for lineElement in code:
+
+        line = lineElement.line
+        lineNum = lineElement.line_num
+
         if len(line) > INSTRUCTION_WIDTH:
-            printError(f"Line {lineNum} in the machine code is too long \nIt is {len(line)} bits long")
+            printError(f"Line {lineNum} is too long \nIt is {len(line)} bits long")
         if not(all(c in '01' for c in line)):
-            printError(f"Line {lineNum} in the machine code has invalid characters \nLine: {line}")
+            printError(f"Line {lineNum} has invalid characters \nLine: {line}")
 
 
 def printError(error: str):
     print("\n############################# ERROR #############################\n")
     print(error)
-    print("#################################################################\n")
+    print("\n#################################################################\n")
     quit()
 
 
@@ -179,11 +208,11 @@ def inAddrSpace(var: dict) -> bool:
         return False
 
 
-def invalidProgramLen():
+def invalidProgramLen(length: int):
     """Generates an error message saying:\n
        Program is too long, it must be ___ lines at most"""
 
-    return f"Program is too long, it must be {MAX_PROGRAM_LEN} lines at most"
+    return f"Program is too long, it must be {MAX_PROGRAM_LEN} lines at most\nProgram length: {length}"
 
 
 def invalidArgNum(lineNum: int, line: str) -> str:
@@ -196,43 +225,43 @@ def invalidArgNum(lineNum: int, line: str) -> str:
 
 def invalidControl(lineNum: int, line: str) -> str:
     """Generates an error message saying:\n
-       Unrecognized control character in line: ___\n
+       Unrecognized control character on line: ___\n
        Line: ___"""
 
-    return f"Unrecognized control character in line: {lineNum + 1} \nLine: {line}"
+    return f"Unrecognized control character on line: {lineNum + 1} \nLine: {line}"
 
 
 def invalidJmpAddr(lineNum: int, line: str) -> str:
     """Generates an error message saying:\n
-       Invalid jump address in line: ___\n
+       Invalid jump address on line: ___\n
        Line: ___"""
 
-    return f"Invalid jump address in line: {lineNum + 1} \nLine: {line}"
+    return f"Invalid jump address on line: {lineNum + 1} \nLine: {line}"
 
 
 def invalidAddr(lineNum: int, line: str) -> str:
     """Generates an error message saying:\n
-       Unrecognized address in line: ___\n
+       Unrecognized address on line: ___\n
        Line: ___"""
 
-    return f"Unrecognized address in line: {lineNum + 1} \nLine: {line}"
+    return f"Unrecognized address on line: {lineNum + 1} \nLine: {line}"
 
 
 def invalidBinLit(lineNum: int, line: str) -> str:
     """Generates an error message saying:\n
-       Invalid characters in line: ___\n
+       Invalid characters on line: ___\n
        Line: ___\n
        Argument 3 should contain only binary (1s and 0s) and should be 3 digits long"""
 
-    return f"Invalid characters in line: {lineNum + 1} \nLine: {line} \nArgument 3 should contain only binary (1s and 0s) and should be 3 digits long"
+    return f"Invalid characters on line: {lineNum + 1} \nLine: {line} \nArgument 3 should contain only binary (1s and 0s) and should be 3 digits long"
 
 
 def invalidLit(lineNum: int, line: str) -> str:
     """Generates an error message saying:\n
-       Invalid literal in line: ___\n
+       Invalid literal on line: ___\n
        Line: ___"""
 
-    return f"""Invalid literal in line: {lineNum + 1} \nLine: {line}"""
+    return f"""Invalid literal on line: {lineNum + 1} \nLine: {line}"""
 
 
 def invalidOp(lineNum: int, line: str) -> str:
@@ -243,24 +272,12 @@ def invalidOp(lineNum: int, line: str) -> str:
     return f"Unrecognized operation on line: {lineNum + 1} \nLine: {line}"
 
 
-def invalidLitAddr(code: list, lineNum: int) -> str:
+def invalidLitAddr(line: str, lineNum: int) -> str:
     """Generates an error message saying:\n
-       Invalid literal address in line: ___\n
-       Surrounding lines: ___"""
+       Invalid literal address on line: ___\n
+       Line: ___"""
 
 
-    my_string = f"Invalid literal address in line: {code[lineNum]} \nSurrounding lines: \n"
+    my_string = f"Invalid literal address on line: {lineNum} \nLine: {line}"
 
-    if lineNum > 0:
-        my_string += code[lineNum - 1] + "\n"
-    else:
-        my_string += "vvv Start of program vvv\n"
-    
-    my_string += code[lineNum] + " <\n"
-    
-    if lineNum < len(code) - 1:
-        my_string +=code[lineNum + 1] + "\n"
-    else:
-        my_string += "^^^ Last line of program \n^^^"
-    
     return my_string

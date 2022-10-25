@@ -11,7 +11,10 @@ def replaceLabels(code: list) -> list:
 
     # Adds all the variable and jump label names to dictionaries
     lineIndex = 0
-    for line in code:
+    for lineElement in code:
+
+        line = lineElement.line
+        
         dataFields = line.split()
         try:
             if dataFields[0] == "var":
@@ -24,35 +27,34 @@ def replaceLabels(code: list) -> list:
                 lineIndex -= 1
         lineIndex += 1
 
-    # Replaces all the variable declarations and jump labels with empty strings
-    for lineNum, line in enumerate(code):
+    # Pops label declaration lines and replaces labels with literals
+    for lineNum, lineElement in reversed(list(enumerate(code))):
+
+        line = lineElement.line
+        
         if line.startswith("var"):
-            line = ""
-        if line.startswith("@"):
-            line = ""
-        code[lineNum] = line
+            code.pop(lineNum)
+        elif line.startswith("@"):
+            code.pop(lineNum)
+        else:
+            lineFields = line.split()
 
-    # Removes empty strings
-    while ("" in code):
-        code.remove("")
-
-    # Replaces the labels with their literal values
-    for lineNum, line in enumerate(code):
-        lineFields = line.strip().split()
-        for index, field in enumerate(lineFields):
-            if field in varLabels:
-                lineFields[index] = varLabels[field]
-            elif field in jumpLabels:
-                lineFields[index] = jumpLabels[field]
-        line = ' '.join(lineFields)
-        code[lineNum] = line
+            for index, field in enumerate(lineFields):
+                if field in varLabels:
+                    lineFields[index] = varLabels[field]
+                elif field in jumpLabels:
+                    lineFields[index] = jumpLabels[field]
+            line = ' '.join(lineFields)
+            code[lineNum].line = line
 
     return code
 
 
 def assemble(code: list) -> list:
     """Converts assembly into machine code"""
-    for lineNum, line in enumerate(code):
+    for lineNum, lineElement in enumerate(code):
+
+        line = lineElement.line
         
         fields = line.split()
 
@@ -62,7 +64,7 @@ def assemble(code: list) -> list:
             operand2 = dict.addrToBin(fields[2], 5)
             operand3 = dict.addrToBin(fields[3], 2)
             control = dict.cntrlToBin(fields[4])
-            code[lineNum] = opCode + operand1 + operand2 + operand3 + control
+            code[lineNum].line = opCode + operand1 + operand2 + operand3 + control
 
         elif fields[0] == "jft":
             opCode = dict.opToBin(fields[0])
@@ -70,13 +72,13 @@ def assemble(code: list) -> list:
             operand2 = fields[2].zfill(5)
             operand3 = "00"
             control = dict.cntrlToBin(fields[3])
-            code[lineNum] = opCode + operand1 + operand2 + operand3 + control
+            code[lineNum].line = opCode + operand1 + operand2 + operand3 + control
 
         elif fields[0] == "lit":
             opCode = dict.opToBin(fields[0])
             operand1 = dict.addrToBin(fields[1], 5)
             operand2 = dict.litToBin(fields[2])
-            code[lineNum] = opCode + operand1 + operand2
+            code[lineNum].line = opCode + operand1 + operand2
 
         elif fields[0] in {"inc","dec","lsh","lsc"}:
             opCode = dict.opToBin(fields[0])
@@ -84,7 +86,7 @@ def assemble(code: list) -> list:
             operand2 = dict.addrToBin(fields[2], 5)
             operand3 = "00"
             control = dict.cntrlToBin(fields[3])
-            code[lineNum] = opCode + operand1 + operand2 + operand3 + control
+            code[lineNum].line = opCode + operand1 + operand2 + operand3 + control
 
         elif fields[0] == "jmp":
             opCode = dict.opToBin(fields[0])
@@ -92,7 +94,7 @@ def assemble(code: list) -> list:
             operand2 = "00000"
             operand3 = "00"
             control = dict.cntrlToBin(fields[2])
-            code[lineNum] = opCode + operand1 + operand2 + operand3 + control
+            code[lineNum].line = opCode + operand1 + operand2 + operand3 + control
 
         elif fields[0] in {"ret","hlt"}:
             opCode = dict.opToBin(fields[0])
@@ -100,7 +102,7 @@ def assemble(code: list) -> list:
             operand2 = "00000"
             operand3 = "00"
             control = "0"
-            code[lineNum] = opCode + operand1 + operand2 + operand3 + control
+            code[lineNum].line = opCode + operand1 + operand2 + operand3 + control
 
         elif fields[0] == "mov":
             opCode = dict.opToBin(fields[0])
@@ -108,7 +110,7 @@ def assemble(code: list) -> list:
             operand2 = dict.addrToBin(fields[2], 5)
             operand3 = "00"
             control = "0"
-            code[lineNum] = opCode + operand1 + operand2 + operand3 + control
+            code[lineNum].line = opCode + operand1 + operand2 + operand3 + control
 
         elif fields[0] == "nop":
             opCode = "00000"
@@ -116,6 +118,6 @@ def assemble(code: list) -> list:
             operand2 = "00000"
             operand3 = "00"
             control = "0"
-            code[lineNum] = opCode + operand1 + operand2 + operand3 + control
+            code[lineNum].line = opCode + operand1 + operand2 + operand3 + control
 
     return code
