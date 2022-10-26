@@ -8,32 +8,30 @@ def generateSchem(code: list):
 
     # Breaks each line into a list of chars
     for lineNum, lineElement in enumerate(code):
-
         line = lineElement.line
-
         code[lineNum].line = [*line]
     
 
     # Direction that the torches face in memory
     TORCH_DIRECTION = "west"
 
-    # Dimensions of program memory, in relative coords from the corner closest to the paste-location
+    # Dimensions of program memory, in relative coords (including direction)
     DIM_Z = 34
     DIM_X = -14
     DIM_Y = -12
 
-    # The offsets of the schem corner from the player
+    # The offsets of the schem corner (0,0,0) from the player
     X_OFFSET = -1
     Y_OFFSET = -1
     Z_OFFSET = 0
 
-    # The step size (how many blocks between torches), disregarding direction
-    Z_STEP_SIZE = 2
+    # The step size (how many blocks between torches), including direction
+    Z_STEP_SIZE = -2
     X_STEP_SIZE = 2
-    Y_STEP_SIZE = 4
+    Y_STEP_SIZE = -4
     
-    # Calculate step size and direction, start point, and end point
-    z_step = -1 * Z_STEP_SIZE
+    # Calculate step size/direction, start point, and end point
+    z_step = Z_STEP_SIZE
     z_start = DIM_Z + Z_OFFSET
     z_end = 0 + Z_OFFSET + z_step
 
@@ -41,7 +39,7 @@ def generateSchem(code: list):
     x_start = DIM_X + X_OFFSET
     x_end = 0 + X_OFFSET + x_step
 
-    y_step = -1 * Y_STEP_SIZE
+    y_step = Y_STEP_SIZE
     y_start = 0 + Y_OFFSET
     y_end = DIM_Y + Y_OFFSET + y_step
 

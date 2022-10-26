@@ -1,4 +1,4 @@
-# 2nd iteration of the assembler for AubLang v1
+# 2nd version of the AubLang assembler
 # By Aubrey Fields
 # Start date: 10/16/2022
 
@@ -10,13 +10,12 @@ import generateSchematic as schem
 
 
 def main():
-    source = input("Paste the path to the source file: ")
-    code = fileParse(source)
+    sourcePath = input("Paste the path to the source file: ")
+    code = fileParse(sourcePath)
 
-    code = debugger.getCodeLines(code)
+    code = debugger.constructLines(code)
     
     code = codeCleaner.cleanLines(code)
-
     debugger.debug(code)
 
     code = assembler.replaceLabels(code)

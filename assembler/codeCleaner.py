@@ -5,8 +5,8 @@ def cleanLines(code: list) -> list:
 
         line = lineElement.line
 
-        line = line.replace("  ", " ")
         line = line.replace("\t", "")
+        line = line.replace("  ", " ")
 
         if "#" in line:
             line = line[: line.index("#")]

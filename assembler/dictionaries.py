@@ -32,8 +32,8 @@ def cntrlToBin(control: str) -> str:
     return control
 
 
-# from: https://stackoverflow.com/questions/12946116/twos-complement-binary-in-python
-def getBin(n: int, bits: int) -> str: # My original algorithm: bin(x)[2:].zfill(y)
+# From: https://stackoverflow.com/questions/12946116/twos-complement-binary-in-python
+def getBin(n: int, bits: int) -> str:
     """Converts n to binary, and fills w/ 0 till the output has 'bits' digits"""
     s = bin(n & int("1"*bits, 2))[2:]
     return ("{0:0>%s}" % (bits)).format(s)

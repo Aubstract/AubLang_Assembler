@@ -14,14 +14,14 @@ def replaceLabels(code: list) -> list:
     for lineElement in code:
 
         line = lineElement.line
-        
-        dataFields = line.split()
+        fields = line.split()
+
         try:
-            if dataFields[0] == "var":
-                varLabels[dataFields[1]] = dataFields[2]
+            if fields[0] == "var":
+                varLabels[fields[1]] = fields[2]
                 lineIndex -= 1
             elif line[0] == "@":
-                jumpLabels[dataFields[0]] = "$" + str(lineIndex)
+                jumpLabels[fields[0]] = "$" + str(lineIndex)
                 lineIndex -= 1
         except:
                 lineIndex -= 1
@@ -37,14 +37,14 @@ def replaceLabels(code: list) -> list:
         elif line.startswith("@"):
             code.pop(lineNum)
         else:
-            lineFields = line.split()
+            fields = line.split()
 
-            for index, field in enumerate(lineFields):
+            for index, field in enumerate(fields):
                 if field in varLabels:
-                    lineFields[index] = varLabels[field]
+                    fields[index] = varLabels[field]
                 elif field in jumpLabels:
-                    lineFields[index] = jumpLabels[field]
-            line = ' '.join(lineFields)
+                    fields[index] = jumpLabels[field]
+            line = ' '.join(fields)
             code[lineNum].line = line
 
     return code
@@ -55,7 +55,6 @@ def assemble(code: list) -> list:
     for lineNum, lineElement in enumerate(code):
 
         line = lineElement.line
-        
         fields = line.split()
 
         if fields[0] in {"add","adc","sub","sbc","and","orr","xor","nnd","nor","xnr","jgt","jet","jlt","jge"}:

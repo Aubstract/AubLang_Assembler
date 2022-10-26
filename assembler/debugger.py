@@ -11,7 +11,7 @@ class Line:
         self.line_num = lineNum
 
 
-def getCodeLines(code: list) -> list:
+def constructLines(code: list) -> list:
     """Takes a list of strings and creates a list of objects, each with two attributes:\n
        - The line of code (str)\n
        - The line number (int)\n
@@ -32,15 +32,12 @@ def debug(code: list):
 
         fields = line.split()
 
-        if len(fields) < 1:
-            continue
-
         if line.startswith("@"):
             if len(fields) != 1:
                 printError(invalidArgNum(lineNum, line))
 
         elif line.startswith("var"):
-            if len(fields) != 3:
+            if len(fields) != 3 or fields[2] not in dict.addrDict:
                 printError(invalidArgNum(lineNum, line))
             if fields[2] not in dict.addrDict:
                 printError(invalidAddr(lineNum, line))
@@ -109,7 +106,7 @@ def debug(code: list):
 
 
 def debugLiteral(code: list):
-    """Checks that the addresses are valid"""
+    """Checks that all literal addresses are valid"""
 
     if len(code) > MAX_PROGRAM_LEN:
         printError(invalidProgramLen(len(code)))
@@ -120,6 +117,8 @@ def debugLiteral(code: list):
         lineNum = lineElement.line_num
         
         fields = line.split()
+
+        # filter() info: https://www.geeksforgeeks.org/filter-in-python/
 
         if fields[0] in {"add","adc","sub","sbc","and","orr","xor","nnd","nor","xnr"}:
             for n in range(1, len(fields) - 1):
@@ -159,17 +158,16 @@ def debugLiteral(code: list):
 def debugMachineCode(code: list):
     """Checks that the machine code is valid"""
 
-    if len(code) > MAX_PROGRAM_LEN:
-        printError(invalidProgramLen())
+    # In the event of a wierd edge case, this is a last check of validity
     for lineElement in code:
 
         line = lineElement.line
         lineNum = lineElement.line_num
 
         if len(line) > INSTRUCTION_WIDTH:
-            printError(f"Line {lineNum} is too long \nIt is {len(line)} bits long")
+            printError(f"Machine code line {lineNum} is too long \nIt is {len(line)} bits long")
         if not(all(c in '01' for c in line)):
-            printError(f"Line {lineNum} has invalid characters \nLine: {line}")
+            printError(f"Machine code line {lineNum} has invalid characters \nLine: {line}")
 
 
 def printError(error: str):
@@ -179,9 +177,8 @@ def printError(error: str):
     quit()
 
 
-def inRegs(var: dict) -> bool:
-     # disp is there so that operating on a value of 0 is allowed
-    registers = {"r0", "r1", "r2", "r3", "disp"}
+def inRegs(var: dict) -> bool: # ADD: a second inRegs for input B (operand 3), which doesnt include "disp", since "disp" is a 4-bit address
+    registers = {"r0", "r1", "r2", "r3", "disp"} # disp is there so that operating on a value of 0 is allowed
     if var in registers:
         return True
     else:
@@ -276,7 +273,4 @@ def invalidLitAddr(line: str, lineNum: int) -> str:
        Invalid literal address on line: ___\n
        Line: ___"""
 
-
-    my_string = f"Invalid literal address on line: {lineNum} \nLine: {line}"
-
-    return my_string
+    return f"Invalid literal address on line: {lineNum} \nLine: {line}"
