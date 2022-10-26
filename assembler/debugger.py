@@ -6,7 +6,6 @@ INSTRUCTION_WIDTH = 18 # number of bits per instruction
 
 
 class Line:
-    
     def __init__(self, line: str, lineNum: int):
         self.line = line
         self.line_num = lineNum

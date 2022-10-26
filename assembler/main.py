@@ -10,9 +10,7 @@ import generateSchematic as schem
 
 
 def main():
-
     source = input("Paste the path to the source file: ")
-
     code = fileParse(source)
 
     code = debugger.getCodeLines(code)
@@ -22,11 +20,9 @@ def main():
     debugger.debug(code)
 
     code = assembler.replaceLabels(code)
-
     debugger.debugLiteral(code)
 
     code = assembler.assemble(code)
-
     debugger.debugMachineCode(code)
 
     schem.generateSchem(code)
