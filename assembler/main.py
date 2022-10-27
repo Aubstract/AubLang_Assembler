@@ -29,7 +29,7 @@ def main():
     printSummary(code)
 
 
-def fileParse(filePath: str) -> list:
+def fileParse(filePath: str) -> list[str]:
     """Reads a file into a list"""
 
     filePath = filePath.strip('"')
@@ -41,7 +41,7 @@ def fileParse(filePath: str) -> list:
     return contents
 
 
-def printSummary(code: list):
+def printSummary(code: list[object]):
     """Prints a report on the program once it is assembled"""
 
     print("\n~~~~~~~~~~~~~~~~~~~~ successfully assembled ~~~~~~~~~~~~~~~~~~~~\n")
