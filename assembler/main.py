@@ -1,6 +1,7 @@
 # 2nd version of the AubLang assembler
 # By Aubrey Fields
 # Start date: 10/16/2022
+# End date: 10/26/2022
 
 
 import codeCleaner
@@ -50,5 +51,6 @@ def printSummary(code: list):
     print(f"jumpLabel Dictionary:\n{assembler.jumpLabels}")
     print(f"varLabel Dictionary:\n{assembler.varLabels}")
     print("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n")
+
 
 main()
