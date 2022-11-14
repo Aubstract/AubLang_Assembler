@@ -33,7 +33,10 @@ def main():
 def fileParse(filePath: str) -> list[str]:
     """Reads a file into a list"""
 
-    filePath = filePath.strip('"')
+    if filePath.startswith('"'):
+        filePath = filePath[1:]
+    if filePath.endswith('"'):
+        filePath = filePath[:1]
 
     file = open(filePath, "r")
     contents = file.readlines()
