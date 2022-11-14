@@ -1,7 +1,7 @@
 import mcschematic
 
 
-def generateSchem(code: list):
+def generateSchem(code: list[object]):
     """Generates a schematic file"""
 
     schem = mcschematic.MCSchematic()

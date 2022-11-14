@@ -1,4 +1,4 @@
-def cleanLines(code: list) -> list:
+def cleanLines(code: list[object]) -> list[object]:
     """Eliminates comments, empty lines, tabs, double spaces, etc"""
 
     for lineNum, lineElement in reversed(list(enumerate(code))):

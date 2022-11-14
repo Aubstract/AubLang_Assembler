@@ -11,7 +11,7 @@ class Line:
         self.line_num = lineNum
 
 
-def constructLines(code: list) -> list:
+def constructLines(code: list[str]) -> list[object]:
     """Takes a list of strings and creates a list of objects, each with two attributes:\n
        - The line of code (str)\n
        - The line number (int)\n
@@ -23,7 +23,7 @@ def constructLines(code: list) -> list:
     return code
 
 
-def debug(code: list):
+def debug(code: list[object]):
     """Checks that the instructions are formatted correctly and have valid arguments"""
     for element in code:
 
@@ -105,7 +105,7 @@ def debug(code: list):
             printError(invalidOp(lineNum, line))
 
 
-def debugLiteral(code: list):
+def debugLiteral(code: list[object]):
     """Checks that all literal addresses are valid"""
 
     if len(code) > MAX_PROGRAM_LEN:
@@ -121,16 +121,19 @@ def debugLiteral(code: list):
         # filter() info: https://www.geeksforgeeks.org/filter-in-python/
 
         if fields[0] in {"add","adc","sub","sbc","and","orr","xor","nnd","nor","xnr"}:
-            for n in range(1, len(fields) - 1):
-                if not fields[n] in filter(inRegs, dict.addrDict):
+            for n in range(1, 2):
+                if not fields[n] in filter(inRegs5, dict.addrDict):
                     printError(invalidLitAddr(line, lineNum))
+            if not fields[3] in filter(inRegs2, dict.addrDict):
+                printError(invalidLitAddr(line, lineNum))
             
         elif fields[0] in {"jgt","jet","jlt","jge"}:
             if not fields[1] in filter(inJmpAddr, dict.addrDict):
                     printError(invalidLitAddr(line, lineNum))
-            for n in range(2, len(fields) - 1):
-                if not fields[n] in filter(inRegs, dict.addrDict):
-                    printError(invalidLitAddr(line, lineNum))
+            if not fields[2] in filter(inRegs5, dict.addrDict):
+                printError(invalidLitAddr(line, lineNum))
+            if not fields[3] in filter(inRegs2, dict.addrDict):
+                printError(invalidLitAddr(line, lineNum))
 
         elif fields[0] == "jft":
             if not fields[1] in filter(inJmpAddr, dict.addrDict):
@@ -142,7 +145,7 @@ def debugLiteral(code: list):
 
         elif fields[0] in {"inc","dec","lsh","lsc"}:
            for n in range(1, len(fields) - 1):
-                if not fields[n] in filter(inRegs, dict.addrDict):
+                if not fields[n] in filter(inRegs5, dict.addrDict):
                     printError(invalidLitAddr(line, lineNum))
 
         elif fields[0] == "jmp":
@@ -155,7 +158,7 @@ def debugLiteral(code: list):
                     printError(invalidLitAddr(line, lineNum))
 
 
-def debugMachineCode(code: list):
+def debugMachineCode(code: list[object]):
     """Checks that the machine code is valid"""
 
     # In the event of a wierd edge case, this is a last check of validity
@@ -177,7 +180,14 @@ def printError(error: str):
     quit()
 
 
-def inRegs(var: dict) -> bool: # ADD: a second inRegs for input B (operand 3), which doesnt include "disp", since "disp" is a 4-bit address
+def inRegs2(var: dict) -> bool:
+    registers = {"r0", "r1", "r2", "r3"}
+    if var in registers:
+        return True
+    else:
+        return False
+
+def inRegs5(var: dict) -> bool:
     registers = {"r0", "r1", "r2", "r3", "disp"} # disp is there so that operating on a value of 0 is allowed
     if var in registers:
         return True

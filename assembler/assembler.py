@@ -6,7 +6,7 @@ jumpLabels = {}
 varLabels = {}
 
 
-def replaceLabels(code: list) -> list:
+def replaceLabels(code: list[object]) -> list[object]:
     """Replaces labels with literal values/addresses"""
 
     # Adds all the variable and jump label names to dictionaries
@@ -50,7 +50,7 @@ def replaceLabels(code: list) -> list:
     return code
 
 
-def assemble(code: list) -> list:
+def assemble(code: list[object]) -> list[object]:
     """Converts assembly into machine code"""
     for lineNum, lineElement in enumerate(code):
 
