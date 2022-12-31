@@ -1,3 +1,6 @@
+# ------------------FUNCTIONS------------------------
+# These are essentially getter functions
+
 def opToBin(opcode: str) -> str:
     """Converts an opcode mnemonic to binary"""
     return getBin(opDict[opcode],5)
@@ -39,6 +42,7 @@ def getBin(n: int, bits: int) -> str:
     return ("{0:0>%s}" % (bits)).format(s)
 
 
+# ------------------DICTIONARIES------------------------
 opDict = {
     "nop" : 0,
     "add" : 1,

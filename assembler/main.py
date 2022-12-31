@@ -4,56 +4,45 @@
 # End date: 10/26/2022
 
 
-import codeCleaner
-import debugger
-import assembler
+import preCompile
+import debug
+import assemble
 import generateSchematic as schem
+import postCompile
 
 
 def main():
+    # Get source file (.aub or .txt) and parse it into a list of strings line by line
     sourcePath = input("Paste the path to the source file: ")
-    code = fileParse(sourcePath)
+    code = preCompile.fileParse(sourcePath)
 
-    code = debugger.constructLines(code)
+    # Take the list of strings and translate it into a list of Lines,
+    # where a Line object stores the contents of the string, and the
+    # line number (the index + 1), this is used later in debugging
+    code = preCompile.constructLines(code)
     
-    code = codeCleaner.cleanLines(code)
-    debugger.debug(code)
+    # Delete comments, empty lines, whitespace, etc
+    code = preCompile.sanitize(code)
 
-    code = assembler.replaceLabels(code)
-    debugger.debugLiteral(code)
+    # debug() looks for syntax errors, valid arguments, etc and
+    # prints an error message if an issue comes up
+    debug.debug(code)
 
-    code = assembler.assemble(code)
-    debugger.debugMachineCode(code)
+    # Replace labels (variables / jump labels) with their literal addresses
+    code = assemble.replaceLabels(code)
 
+    # Check to make sure there arent any arguments left that arent literal addresses
+    debug.debugLiteral(code)
+
+    # Convert to binary, then make sure the binary is valid
+    code = assemble.assemble(code)
+    debug.debugMachineCode(code)
+
+    # Use the binary to generate a schematic to paste into Minecraft
     schem.generateSchem(code)
 
-    printSummary(code)
-
-
-def fileParse(filePath: str) -> list[str]:
-    """Reads a file into a list"""
-
-    if filePath.startswith('"'):
-        filePath = filePath[1:]
-    if filePath.endswith('"'):
-        filePath = filePath[:1]
-
-    file = open(filePath, "r")
-    contents = file.readlines()
-    file.close()
-
-    return contents
-
-
-def printSummary(code: list[object]):
-    """Prints a report on the program once it is assembled"""
-
-    print("\n~~~~~~~~~~~~~~~~~~~~ successfully assembled ~~~~~~~~~~~~~~~~~~~~\n")
-    print("Output file name: output.schem\n")
-    print(f"Program length: {len(code)} lines")
-    print(f"jumpLabel Dictionary:\n{assembler.jumpLabels}")
-    print(f"varLabel Dictionary:\n{assembler.varLabels}")
-    print("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n")
+    # Print a report
+    postCompile.printSummary(code)
 
 
 main()

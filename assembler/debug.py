@@ -5,100 +5,86 @@ MAX_PROGRAM_LEN = 32
 INSTRUCTION_WIDTH = 18 # number of bits per instruction
 
 
-class Line:
-    def __init__(self, line: str, lineNum: int):
-        self.line = line
-        self.line_num = lineNum
-
-
-def constructLines(code: list[str]) -> list[object]:
-    """Takes a list of strings and creates a list of objects, each with two attributes:\n
-       - The line of code (str)\n
-       - The line number (int)\n
-       This allows the debugger to specify the line number in an error message"""
-
-    for lineNum, line in enumerate(code):
-        code[lineNum] = Line(line, lineNum)
-    
-    return code
-
-
 def debug(code: list[object]):
     """Checks that the instructions are formatted correctly and have valid arguments"""
+
     for element in code:
 
+        # Unpack the members from the objects to make syntax easier
         line = element.line
         lineNum = element.line_num
 
-        fields = line.split()
+        tokens = line.split()
 
-        if line.startswith("@"):
-            if len(fields) != 1:
-                printError(invalidArgNum(lineNum, line))
+        if line.startswith("@") and len(tokens) != 1:
+            printError(invalidArgNum(lineNum, line))
 
         elif line.startswith("var"):
-            if len(fields) != 3 or fields[2] not in dict.addrDict:
+            if len(tokens) != 3 or tokens[2] not in dict.addrDict:
                 printError(invalidArgNum(lineNum, line))
-            if fields[2] not in dict.addrDict:
+            if tokens[2] not in dict.addrDict:
                 printError(invalidAddr(lineNum, line))
         
-        elif fields[0] in dict.opDict:
+        elif tokens[0] in dict.opDict:
 
-            if fields[0] in {"add","adc","sub","sbc","and","orr","xor","nnd","nor","xnr"}:
-                if len(fields) != 5:
+            if tokens[0] in {"add","adc","sub","sbc","and","orr","xor","nnd","nor","xnr"}:
+                if len(tokens) != 5:
                     printError(invalidArgNum(lineNum, line))
-                if fields[4] not in {"True", "true", "False", "false"}:
+                if tokens[4] not in {"True", "true", "False", "false"}:
                     printError(invalidControl(lineNum, line))
 
-            elif fields[0] in {"jgt","jet","jlt","jge"}:
-                if len(fields) != 5:
+            elif tokens[0] in {"jgt","jet","jlt","jge"}:
+                if len(tokens) != 5:
                     printError(invalidArgNum(lineNum, line))
-                if fields[4] not in {"True", "true", "False", "false"}:
+                if tokens[4] not in {"True", "true", "False", "false"}:
                     printError(invalidControl(lineNum, line))
-                if not fields[1].startswith("@"):
+                if not tokens[1].startswith("@"):
                     printError(invalidJmpAddr(lineNum, line))
 
-            elif fields[0] == "jft":
-                if len(fields) != 4:
+            elif tokens[0] == "jft":
+                if len(tokens) != 4:
                     printError(invalidArgNum(lineNum, line))
-                if not fields[1].startswith("@"):
+                if not tokens[1].startswith("@"):
                     printError(invalidJmpAddr(lineNum, line))
-                if not (all(c in '01' for c in fields[2]) and len(fields[2]) == 3):
+                if not (all(c in '01' for c in tokens[2]) and len(tokens[2]) == 3):
                     printError(invalidBinLit(lineNum, line))
-                if fields[3] not in {"True", "true", "False", "false"}:
+                if tokens[3] not in {"True", "true", "False", "false"}:
                     printError(invalidControl(lineNum, line))
 
-            elif fields[0] == "lit":
-                if len(fields) != 3:
+            elif tokens[0] == "lit":
+                if len(tokens) != 3:
                     printError(invalidArgNum(lineNum, line))
                 # If NOT((string has two ' marks AND is in charDict) OR (string has zero ' marks AND is a number between -128 and 256))
-                if not (((fields[2].startswith("'") and fields[2].endswith("'") and fields[2].count("'") == 2) and fields[2].strip("'") in dict.charDict) or (fields[2].count("'") == 0 and fields[2].lstrip("-").isnumeric() and int(fields[2]) <= 255 and int(fields[2]) >= -128)):
+                if not (
+                        ((tokens[2].startswith("'") and tokens[2].endswith("'") and tokens[2].count("'") == 2) and tokens[2].strip("'") in dict.charDict) 
+                        or (tokens[2].count("'") == 0 and tokens[2].lstrip("-").isnumeric() and int(tokens[2]) <= 255 and int(tokens[2]) >= -128)
+                        ):
                     printError(invalidLit(lineNum, line))
 
-            elif fields[0] in {"inc","dec","lsh","lsc"}:
-                if len(fields) != 4:
+            elif tokens[0] in {"inc","dec","lsh","lsc"}:
+                if len(tokens) != 4:
                     printError(invalidArgNum(lineNum, line))
-                if fields[3] not in {"True", "true", "False", "false"}:
+                if tokens[3] not in {"True", "true", "False", "false"}:
                     printError(invalidControl(lineNum, line))
 
-            elif fields[0] == "jmp":
-                if len(fields) != 3:
+            elif tokens[0] == "jmp":
+                if len(tokens) != 3:
                     printError(invalidArgNum(lineNum, line))
-                if not fields[1].startswith("@"):
+                if not tokens[1].startswith("@"):
                     printError(invalidJmpAddr(lineNum, line))
-                if fields[2] not in {"True", "true", "False", "false"}:
+                if tokens[2] not in {"True", "true", "False", "false"}:
                     printError(invalidControl(lineNum, line))
 
-            elif fields[0] in {"ret","hlt"}:
-                if len(fields) != 1:
+            elif tokens[0] in {"ret","hlt"}:
+                if len(tokens) != 1:
                     printError(invalidArgNum(lineNum, line))
 
-            elif fields[0] == "mov":
-                if len(fields) != 3:
+            elif tokens[0] == "mov":
+                if len(tokens) != 3:
                     printError(invalidArgNum(lineNum, line))
 
-            elif fields[0] == "nop":
-                if len(fields) != 1:
+            elif tokens[0] == "nop":
+                if len(tokens) != 1:
                     printError(invalidArgNum(lineNum, line))
 
         else:
@@ -116,45 +102,45 @@ def debugLiteral(code: list[object]):
         line = lineElement.line
         lineNum = lineElement.line_num
         
-        fields = line.split()
+        tokens = line.split()
 
         # filter() info: https://www.geeksforgeeks.org/filter-in-python/
 
-        if fields[0] in {"add","adc","sub","sbc","and","orr","xor","nnd","nor","xnr"}:
+        if tokens[0] in {"add","adc","sub","sbc","and","orr","xor","nnd","nor","xnr"}:
             for n in range(1, 2):
-                if not fields[n] in filter(inRegs5, dict.addrDict):
+                if not tokens[n] in filter(inRegs5, dict.addrDict):
                     printError(invalidLitAddr(line, lineNum))
-            if not fields[3] in filter(inRegs2, dict.addrDict):
+            if not tokens[3] in filter(inRegs2, dict.addrDict):
                 printError(invalidLitAddr(line, lineNum))
             
-        elif fields[0] in {"jgt","jet","jlt","jge"}:
-            if not fields[1] in filter(inJmpAddr, dict.addrDict):
+        elif tokens[0] in {"jgt","jet","jlt","jge"}:
+            if not tokens[1] in filter(inJmpAddr, dict.addrDict):
                     printError(invalidLitAddr(line, lineNum))
-            if not fields[2] in filter(inRegs5, dict.addrDict):
+            if not tokens[2] in filter(inRegs5, dict.addrDict):
                 printError(invalidLitAddr(line, lineNum))
-            if not fields[3] in filter(inRegs2, dict.addrDict):
-                printError(invalidLitAddr(line, lineNum))
-
-        elif fields[0] == "jft":
-            if not fields[1] in filter(inJmpAddr, dict.addrDict):
+            if not tokens[3] in filter(inRegs2, dict.addrDict):
                 printError(invalidLitAddr(line, lineNum))
 
-        elif fields[0] == "lit":
-            if not fields[1] in filter(inAddrSpace, dict.addrDict):
+        elif tokens[0] == "jft":
+            if not tokens[1] in filter(inJmpAddr, dict.addrDict):
                 printError(invalidLitAddr(line, lineNum))
 
-        elif fields[0] in {"inc","dec","lsh","lsc"}:
-           for n in range(1, len(fields) - 1):
-                if not fields[n] in filter(inRegs5, dict.addrDict):
+        elif tokens[0] == "lit":
+            if not tokens[1] in filter(inAddrSpace, dict.addrDict):
+                printError(invalidLitAddr(line, lineNum))
+
+        elif tokens[0] in {"inc","dec","lsh","lsc"}:
+           for n in range(1, len(tokens) - 1):
+                if not tokens[n] in filter(inRegs5, dict.addrDict):
                     printError(invalidLitAddr(line, lineNum))
 
-        elif fields[0] == "jmp":
-            if not fields[1] in filter(inJmpAddr, dict.addrDict):
+        elif tokens[0] == "jmp":
+            if not tokens[1] in filter(inJmpAddr, dict.addrDict):
                 printError(invalidLitAddr(line, lineNum))
 
-        elif fields[0] == "mov":
-            for n in range(1, len(fields)):
-                if not fields[n] in filter(inAddrSpace, dict.addrDict):
+        elif tokens[0] == "mov":
+            for n in range(1, len(tokens)):
+                if not tokens[n] in filter(inAddrSpace, dict.addrDict):
                     printError(invalidLitAddr(line, lineNum))
 
 
