@@ -1,0 +1,30 @@
+# Print Test
+# By Aubrey Fields
+# 11/18/2022
+
+lit r0 0
+lit r1 72
+
+@mainLoop
+	mov disp r0
+	inc r0 r0 false
+	mov disp r0
+	inc r0 r0 false
+	mov disp r0
+	inc r0 r0 false
+	mov disp r0
+	inc r0 r0 false
+	mov disp r0
+	inc r0 r0 false
+	mov disp r0
+	inc r0 r0 false
+	mov disp r0
+	inc r0 r0 false
+	mov disp r0
+	inc r0 r0 false
+	lit disp '\m'
+	jge @halt r0 r1 false
+	jmp @mainLoop false
+
+@halt
+hlt

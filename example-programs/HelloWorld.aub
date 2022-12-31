@@ -1,0 +1,16 @@
+# Hello World Program
+# By Aubrey Fields
+# 10/1/2022
+
+lit disp 'H'
+lit disp 'e'
+lit disp 'l'
+lit disp 'l'
+lit disp 'o'
+lit disp '\m'
+lit disp 'W'
+lit disp 'o'
+lit disp 'r'
+lit disp 'l'
+lit disp 'd'
+hlt

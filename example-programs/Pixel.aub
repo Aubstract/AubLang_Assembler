@@ -1,0 +1,58 @@
+# Bouncing Pixel Program
+# By Aubrey Fields
+# 10/1/2022
+
+# Declare variables and their addresses
+var x r0
+var y r1
+var max_x r2
+var max_y r3
+var vel_x m0
+var vel_y m1
+var temp_x m2
+var temp_y m3
+
+# Initialize x and y
+lit x 16
+lit y 12
+
+# Initialize max values (screen dimensions)
+lit max_x 31
+lit max_y 23
+
+# Initialize velocity values
+lit vel_x 1
+lit vel_y 1
+
+@mainLoop
+	# Plots point to screen using sequence plot
+	mov plotx x
+	mov ploty y
+	lit disp '\s'
+	
+	# Change x coordinate
+	mov temp_y y
+	mov y vel_x
+	jet @changeVelX max_x x true
+	jet @changeVelX disp x true
+	add x x y false
+	mov vel_x y
+	mov y temp_y
+	
+	# Change y coordinate
+	mov temp_x x
+	mov x vel_y
+	jet @changeVelY max_y y true
+	jet @changeVelY disp y true
+	add y y x false
+	mov vel_y x
+	mov x temp_x
+	jmp @mainLoop false
+
+@changeVelX
+sub y disp y false
+ret
+
+@changeVelY
+sub x disp x false
+ret

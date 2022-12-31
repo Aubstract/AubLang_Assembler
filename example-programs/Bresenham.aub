@@ -1,0 +1,90 @@
+# Bresenham's Line Drawing Algorithm 
+# By Aubrey Fields
+# 10/1/2022
+
+# This version of Bresenham's Alg only works if x0 < x1 and y0 < y1 
+# Notes:
+# The user has to make the first input before starting the clock!!!
+# Flip the levers on the binary input, then flip the "Start clock" lever.
+# It HAS to be in that order.
+
+# Declare variable addresses (just for compiler)
+var dx r0
+var dy r1
+var D r2
+var y r3
+
+var x0 r0
+var x1 r1
+var y0 r3
+var y1 r2
+
+var x r1
+var y r3
+
+var memDY m0
+var memX m1
+var count m2
+
+# take inputs x0 and x1
+mov x0 disp
+hlt
+mov x1 disp
+
+# save the value of x0
+mov memX x0
+
+# calculate dx (difference in x values)
+sub dx x1 x0 false
+
+# save the dx as count
+mov count dx
+
+# take inputs y0 and y1
+hlt
+mov y0 disp
+hlt
+mov y1 disp
+
+# calculate dy (difference in y values)
+sub dy y1 y0 false
+
+# save dy to RAM
+mov memDY dy
+
+# calculate D (D = 2dy - dx)
+lsh D dy false
+sub D D dx false
+ 
+@mainLoop
+	mov count x
+	mov x memX
+	
+	# Plot point
+	mov plotx x
+	mov ploty y
+	lit disp '\p'
+	
+	# increment x for next iteration then save to RAM
+	inc x x false # test of in-line comments
+	mov memX x
+
+	# jump to @skipSubroutine if D > 0
+	jlt @skipSubroutine disp D false
+	inc y y false
+	lsh x dx false
+	sub D D x false
+	
+	@skipSubroutine
+	# recall value for dy
+	mov dy memDY
+
+	# multiply dy by 2, add it to D, set that to new D value
+	lsh dy dy false
+	add D D dy false
+
+	# if count > 0, then loop, else continue to halt
+	mov x count
+	dec x x false
+	jlt @mainLoop disp x false
+hlt

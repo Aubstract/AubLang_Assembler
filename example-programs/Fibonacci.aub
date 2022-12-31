@@ -1,0 +1,29 @@
+# Fibonacci program
+# By Aubrey Fields
+# 9/20/2022
+
+# Declare variables and their addresses
+var a r0
+var b r1
+var c r2
+
+# Initialize the variables with the first two terms of the Fib sequence
+lit a 0
+lit b 1
+
+# Print the first two terms
+mov bcd a
+mov bcd b
+
+# Add a to b, test to see if sum > 255, if so jump to @halt,
+# else continue, print sum, move vars around, loop back to @mainLoop
+@mainLoop
+	add c a b true # Flag register will eventually read: 1,0,0 (carry, zero, negative)
+	jft @halt 100 false # Jump if overflow
+	mov bcd c
+	mov a b
+	mov b c
+	jmp @mainLoop false
+
+@halt
+hlt

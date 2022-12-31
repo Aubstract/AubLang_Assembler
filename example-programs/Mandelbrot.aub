@@ -1,0 +1,22 @@
+# Mandelbrot Program
+# By Aubrey Fields
+# 10/8/2022
+
+var x2 r0
+var y2 r1
+var x r2
+var y r3
+var iteration
+
+var memX2 m0
+var memY2 m1
+var memX m2
+var memY m3
+var memIteration
+
+lit x2 0
+lit y2 0
+
+
+@mainLoop
+add 
