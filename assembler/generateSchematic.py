@@ -1,16 +1,13 @@
+import os
 import mcschematic
 
 
 def generateSchem(code: list[object]):
     """Generates a schematic file"""
 
-    schem = mcschematic.MCSchematic()
+    # Initialize CONSTS and vars -------------------------------------------
 
-    # Breaks each line into a list of chars
-    for lineNum, lineElement in enumerate(code):
-        line = lineElement.line
-        code[lineNum].line = [*line]
-    
+    USERNAME = os.getlogin()
 
     # Direction that the torches face in memory
     TORCH_DIRECTION = "west"
@@ -43,6 +40,15 @@ def generateSchem(code: list[object]):
     y_start = 0 + Y_OFFSET
     y_end = DIM_Y + Y_OFFSET + y_step
 
+    # END Initialize CONSTS and vars -------------------------------------------
+
+
+    schem = mcschematic.MCSchematic()
+
+    # Breaks each line into a list of chars
+    for lineNum, lineElement in enumerate(code):
+        line = lineElement.line
+        code[lineNum].line = [*line]
 
     totalRows = len(code)
     rowCount = 0
@@ -65,4 +71,4 @@ def generateSchem(code: list[object]):
             colCount = 0
             rowCount += 1
 
-    schem.save("C:/Users/Ben/AppData/Roaming/.minecraft/config/worldedit/schematics", "output", mcschematic.Version.JE_1_18_2)
+    schem.save(f"C:/Users/{USERNAME}/AppData/Roaming/.minecraft/config/worldedit/schematics", "output", mcschematic.Version.JE_1_18_2)

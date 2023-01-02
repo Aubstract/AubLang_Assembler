@@ -2,7 +2,7 @@
 # By Aubrey Fields
 # 9/24/2022
 
-# ERROR - there is a logical error in the code
+# ERROR - too many lines (36), need user defined flag to make it more succinct
 
 # a / b = c , r
 # a = dividend
@@ -15,20 +15,41 @@ var dividend r0
 var divisor r1
 var remainder r2
 var temp r3
+var printFlag m0
 
 # Initialize variables
 lit dividend 1
 
 # Main program
 @mainLoop
+	lit printFlag 0
+
 	lit divisor 3
 	jmp @divide true
-	jet @fizz disp remainder true
+	jft @skipFizz 101 false
+	lit disp 'F'
+	lit disp 'i'
+	lit disp 'z'
+	lit disp 'z'
+	jmp @flagUpdate true
+	@skipFizz
+
 	lit divisor 5
 	jmp @divide true
-	jet @buzz disp remainder false
-	mov bcd dividend
-	@returnMain
+	jft @skipBuzz 101 false
+	lit disp 'B'
+	lit disp 'u'
+	lit disp 'z'
+	lit disp 'z'
+	jmp @flagUpdate true
+	@skipBuzz
+
+	mov temp printFlag
+	jet @skipNum disp temp false 
+	mov bcd dividend	# Prints the number
+						# Should I remove functionality of \m then print num from BCD? seems like yes
+	@skipNum
+
 	lit disp '\m'
 	inc dividend dividend false
 	lit temp 101
@@ -39,23 +60,15 @@ hlt
 @divide
 mov temp dividend
 @divideLoop
-	sub temp temp divisor false
+	sub temp temp divisor true
 	mov remainder temp
 	jge @return disp temp false
 	jmp @divideLoop false
 @return
 ret
 
-@fizz
-lit disp 'F'
-lit disp 'i'
-lit disp 'z'
-lit disp 'z'
-ret
-
-@buzz
-lit disp 'B'
-lit disp 'u'
-lit disp 'z'
-lit disp 'z'
-jmp @returnMain false
+@flagUpdate
+	mov temp printFlag
+	inc temp temp false
+	mov printFlag temp
+	ret

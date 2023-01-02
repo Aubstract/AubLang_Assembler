@@ -1,8 +1,8 @@
 import dictionaries as dict
 
 
-MAX_PROGRAM_LEN = 32
-INSTRUCTION_WIDTH = 18 # number of bits per instruction
+MAX_PROGRAM_LEN = 32 # Max number of instructions allowed in the program
+INSTRUCTION_WIDTH = 18 # Number of bits per instruction
 
 
 def debug(code: list[object]):
@@ -16,8 +16,9 @@ def debug(code: list[object]):
 
         tokens = line.split()
 
-        if line.startswith("@") and len(tokens) != 1:
-            printError(invalidArgNum(lineNum, line))
+        if line.startswith("@"): 
+            if len(tokens) != 1:
+                printError(invalidArgNum(lineNum, line))
 
         elif line.startswith("var"):
             if len(tokens) != 3 or tokens[2] not in dict.addrDict:

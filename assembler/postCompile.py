@@ -5,7 +5,7 @@ def printSummary(code: list[object]):
 
     print("\n~~~~~~~~~~~~~~~~~~~~ successfully assembled ~~~~~~~~~~~~~~~~~~~~\n")
     print("Output file name: output.schem\n")
-    print(f"Program length: {len(code)} lines")
-    print(f"jumpLabel Dictionary:\n{assemble.jumpLabels}")
+    print(f"Program length: {len(code)} lines\n")
+    print(f"jumpLabel Dictionary:\n{assemble.jumpLabels}\n")
     print(f"varLabel Dictionary:\n{assemble.varLabels}")
     print("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n")
