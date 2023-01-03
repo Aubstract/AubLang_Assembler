@@ -1,4 +1,5 @@
-# 2nd version of the AubLang assembler
+# The AubLang Assembler
+# Version 2
 # By Aubrey Fields
 # Start date: 10/16/2022
 # End date: 10/26/2022

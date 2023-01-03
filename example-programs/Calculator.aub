@@ -1,0 +1,67 @@
+# Calculator Program 
+# By Aubrey Fields
+# 1/2/2023
+
+# The goal with this program is to have one program that can do the 4 basic
+# arithmetic operations.
+# Unfortunately, there isnt enough program memory to be able to print the
+# inputs and the operation symbol (+,-,*,/), just the result of the operation
+
+var a r0
+var b r1
+var result r2
+var remainder r3
+
+# Get input A
+mov a disp
+hlt
+
+# Get operation, store it temporarily in remainder
+mov remainder disp
+hlt
+
+# Get input B
+mov b disp
+
+# Decision tree
+lit result 1 # Use result to store a temp value
+jet @add remainder result false
+inc result result false
+jet @subtract remainder result false
+inc result result false
+jet @multiply remainder result false
+lit result 0
+# If none of the "branches" are taken, then it defaults to division:
+@divide
+	sub a a b false 
+    jge @returnFromDivide disp a false
+	mov remainder a
+    inc result result false
+	jmp @divide false
+@returnFromDivide
+mov bcd result
+mov bcd remainder
+hlt
+
+# Print result(s)
+@printResult
+mov bcd result
+hlt
+
+
+@add
+add result a b false
+jmp @printResult false
+
+@subtract
+sub result a b false
+jmp @printResult false
+
+@multiply
+lit remainder 1
+mov result a
+@multiplyLoop
+    add result result a false
+    dec b b false
+    jlt @multiplyLoop remainder b false
+jmp @printResult false

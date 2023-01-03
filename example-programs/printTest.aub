@@ -2,9 +2,13 @@
 # By Aubrey Fields
 # 11/18/2022
 
+# This program prints every character in the character ROM
+
+# Define starting point and ending point
 lit r0 0
 lit r1 72
 
+# Iterate from start to end point, printing each character
 @mainLoop
 	mov disp r0
 	inc r0 r0 false

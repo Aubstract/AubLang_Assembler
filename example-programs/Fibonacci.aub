@@ -19,7 +19,7 @@ mov bcd b
 # else continue, print sum, move vars around, loop back to @mainLoop
 @mainLoop
 	add c a b true # Flag register will eventually read: 1,0,0 (carry, zero, negative)
-	jft @halt 100 false # Jump if overflow
+	jft @halt 1000 false # Jump if overflow
 	mov bcd c
 	mov a b
 	mov b c
