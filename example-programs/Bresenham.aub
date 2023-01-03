@@ -2,11 +2,7 @@
 # By Aubrey Fields
 # 10/1/2022
 
-# This version of Bresenham's Alg only works if x0 < x1 and y0 < y1 
-# Notes:
-# The user has to make the first input before starting the clock!!!
-# Flip the levers on the binary input, then flip the "Start clock" lever.
-# It HAS to be in that order.
+# This version of Bresenham's Alg only works if x0 < x1 and y0 < y1
 
 # Declare variable addresses (just for compiler)
 var dx r0
@@ -26,10 +22,9 @@ var memDY m0
 var memX m1
 var count m2
 
-# take inputs x0 and x1
-mov x0 disp
-hlt
-mov x1 disp
+# Set values for x0 and x1
+lit x0 2
+lit x1 12
 
 # save the value of x0
 mov memX x0
@@ -41,10 +36,8 @@ sub dx x1 x0 false
 mov count dx
 
 # take inputs y0 and y1
-hlt
-mov y0 disp
-hlt
-mov y1 disp
+lit y0 3
+lit y1 8
 
 # calculate dy (difference in y values)
 sub dy y1 y0 false
@@ -53,7 +46,7 @@ sub dy y1 y0 false
 mov memDY dy
 
 # calculate D (D = 2dy - dx)
-lsh D dy false
+add D dy dy false # Used to be lsh D dy false
 sub D D dx false
  
 @mainLoop
@@ -66,13 +59,13 @@ sub D D dx false
 	lit disp '\p'
 	
 	# increment x for next iteration then save to RAM
-	inc x x false # test of in-line comments
+	inc x x false
 	mov memX x
 
 	# jump to @skipSubroutine if D > 0
 	jlt @skipSubroutine disp D false
 	inc y y false
-	lsh x dx false
+	add x dx dx false # Used to be lsh x dx false
 	sub D D x false
 	
 	@skipSubroutine
@@ -80,7 +73,7 @@ sub D D dx false
 	mov dy memDY
 
 	# multiply dy by 2, add it to D, set that to new D value
-	lsh dy dy false
+	add dy dy dy false # Used to be lsh dy dy false
 	add D D dy false
 
 	# if count > 0, then loop, else continue to halt

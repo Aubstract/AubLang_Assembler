@@ -2,10 +2,6 @@
 import dictionaries as dict
 
 
-jumpLabels = {}
-varLabels = {}
-
-
 def replaceLabels(code: list[object]) -> list[object]:
     """Replaces labels with literal values/addresses"""
 
@@ -18,10 +14,10 @@ def replaceLabels(code: list[object]) -> list[object]:
 
         try:
             if fields[0] == "var":
-                varLabels[fields[1]] = fields[2]
+                dict.varLabels[fields[1]] = fields[2]
                 lineIndex -= 1
             elif line[0] == "@":
-                jumpLabels[fields[0]] = "$" + str(lineIndex)
+                dict.jumpLabels[fields[0]] = "$" + str(lineIndex)
                 lineIndex -= 1
         except:
                 lineIndex -= 1
@@ -40,10 +36,10 @@ def replaceLabels(code: list[object]) -> list[object]:
             fields = line.split()
 
             for index, field in enumerate(fields):
-                if field in varLabels:
-                    fields[index] = varLabels[field]
-                elif field in jumpLabels:
-                    fields[index] = jumpLabels[field]
+                if field in dict.varLabels:
+                    fields[index] = dict.varLabels[field]
+                elif field in dict.jumpLabels:
+                    fields[index] = dict.jumpLabels[field]
             line = ' '.join(fields)
             code[lineNum].line = line
 
@@ -79,7 +75,7 @@ def assemble(code: list[object]) -> list[object]:
             operand2 = dict.litToBin(fields[2])
             code[lineNum].line = opCode + operand1 + operand2
 
-        elif fields[0] in {"inc","dec","lsh","lsc"}:
+        elif fields[0] in {"inc","dec"}:
             opCode = dict.opToBin(fields[0])
             operand1 = dict.addrToBin(fields[1], 5)
             operand2 = dict.addrToBin(fields[2], 5)
@@ -111,8 +107,8 @@ def assemble(code: list[object]) -> list[object]:
             control = "0"
             code[lineNum].line = opCode + operand1 + operand2 + operand3 + control
 
-        elif fields[0] == "nop":
-            opCode = "00000"
+        elif fields[0] in {"nop","suf","cuf"}:
+            opCode = dict.opToBin(fields[0])
             operand1 = "00000"
             operand2 = "00000"
             operand3 = "00"

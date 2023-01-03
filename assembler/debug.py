@@ -47,7 +47,7 @@ def debug(code: list[object]):
                     printError(invalidArgNum(lineNum, line))
                 if not tokens[1].startswith("@"):
                     printError(invalidJmpAddr(lineNum, line))
-                if not (all(c in '01' for c in tokens[2]) and len(tokens[2]) == 3):
+                if not (all(c in '01' for c in tokens[2]) and len(tokens[2]) == 4):
                     printError(invalidBinLit(lineNum, line))
                 if tokens[3] not in {"True", "true", "False", "false"}:
                     printError(invalidControl(lineNum, line))
@@ -62,7 +62,7 @@ def debug(code: list[object]):
                         ):
                     printError(invalidLit(lineNum, line))
 
-            elif tokens[0] in {"inc","dec","lsh","lsc"}:
+            elif tokens[0] in {"inc","dec"}:
                 if len(tokens) != 4:
                     printError(invalidArgNum(lineNum, line))
                 if tokens[3] not in {"True", "true", "False", "false"}:
@@ -84,7 +84,7 @@ def debug(code: list[object]):
                 if len(tokens) != 3:
                     printError(invalidArgNum(lineNum, line))
 
-            elif tokens[0] == "nop":
+            elif tokens[0] in {"nop","suf","cuf"}:
                 if len(tokens) != 1:
                     printError(invalidArgNum(lineNum, line))
 
@@ -130,7 +130,7 @@ def debugLiteral(code: list[object]):
             if not tokens[1] in filter(inAddrSpace, dict.addrDict):
                 printError(invalidLitAddr(line, lineNum))
 
-        elif tokens[0] in {"inc","dec","lsh","lsc"}:
+        elif tokens[0] in {"inc","dec"}:
            for n in range(1, len(tokens) - 1):
                 if not tokens[n] in filter(inRegs5, dict.addrDict):
                     printError(invalidLitAddr(line, lineNum))

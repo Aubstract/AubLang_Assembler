@@ -42,7 +42,20 @@ def getBin(n: int, bits: int) -> str:
     return ("{0:0>%s}" % (bits)).format(s)
 
 
+# ---------------------SETS-----------------------------
+argSet = {
+    "print",
+    "file",
+    "aub",
+    "bin",
+    "label",
+    "all"
+}
+
 # ------------------DICTIONARIES------------------------
+jumpLabels = {}
+varLabels = {}
+
 opDict = {
     "nop" : 0,
     "add" : 1,
@@ -57,8 +70,8 @@ opDict = {
     "nnd" : 10,
     "nor" : 11,
     "xnr" : 12,
-    "lsh" : 13,
-    "lsc" : 14,
+    "suf" : 13,
+    "cuf" : 14,
     "jft" : 15,
     "jgt" : 16,
     "jet" : 17,

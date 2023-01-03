@@ -2,8 +2,6 @@
 # By Aubrey Fields
 # 9/24/2022
 
-# ERROR - too many lines (36), need user defined flag to make it more succinct
-
 # a / b = c , r
 # a = dividend
 # b = divisor
@@ -15,39 +13,37 @@ var dividend r0
 var divisor r1
 var remainder r2
 var temp r3
-var printFlag m0
 
 # Initialize variables
 lit dividend 1
 
 # Main program
 @mainLoop
-	lit printFlag 0
+	# Clear user flag
+	cuf
 
 	lit divisor 3
 	jmp @divide true
-	jft @skipFizz 101 false
+	jft @skipFizz 1010 false
 	lit disp 'F'
 	lit disp 'i'
 	lit disp 'z'
 	lit disp 'z'
-	jmp @flagUpdate true
+	suf # Set user flag
 	@skipFizz
 
 	lit divisor 5
 	jmp @divide true
-	jft @skipBuzz 101 false
+	jft @skipBuzz 1010 false
 	lit disp 'B'
 	lit disp 'u'
 	lit disp 'z'
 	lit disp 'z'
-	jmp @flagUpdate true
+	suf # Set user flag
 	@skipBuzz
 
-	mov temp printFlag
-	jet @skipNum disp temp false 
-	mov bcd dividend	# Prints the number
-						# Should I remove functionality of \m then print num from BCD? seems like yes
+	jft @skipNum 0001 false # Test user flag
+	mov bcd dividend # Prints the number
 	@skipNum
 
 	lit disp '\m'
@@ -66,9 +62,3 @@ mov temp dividend
 	jmp @divideLoop false
 @return
 ret
-
-@flagUpdate
-	mov temp printFlag
-	inc temp temp false
-	mov printFlag temp
-	ret
