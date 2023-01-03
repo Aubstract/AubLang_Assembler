@@ -1,0 +1,63 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "AubLang",
+	"patterns": [
+		{
+			"include": "#comment"
+		},
+		{
+			"include": "#literal"
+		},
+		{
+			"include": "#jumplabel"
+		},
+		{
+			"include": "#operator"
+		},
+		{
+			"include": "#variable"
+		},
+		{
+			"include": "#literal_address"
+		},
+		{
+			"include": "#boolean"
+		}
+	],
+	"repository": {
+		"comment": {
+			"name": "comment.line.number-sign.aublang",
+			"begin": "#",
+			"end": "\n"
+		},
+		"jumplabel": {
+			"name": "variable.parameter.aublang",
+			"begin": "@",
+			"end": " |\n"
+		},
+		"operator": {
+			"name": "keyword.operator.new.aublang",
+			"match": "\\b(nop|add|adc|inc|sub|sbc|dec|and|orr|xor|nnd|nor|xnr|suf|cuf|jft|jgt|jet|jlt|jmp|ret|lit|mov|hlt|jge|var)\\b"
+		},
+		"literal_address": {
+			"name": "constant.numeric.aublang",
+			"match": "\\b([rm]\\d+|\\$\\d+|disp|bcd|plotx|ploty)\\b"
+		},
+		"literal": {
+			"patterns": [{
+				"name": "string.quoted.single",
+				"begin": "'",
+				"end": "'"
+			},
+			{
+				"name": "string.quoted.single",
+				"match": "\\b(\\d+|\\-\\d+)\\b"
+			}]
+		},
+		"boolean": {
+			"name": "keyword.control.aublang",
+			"match": "\\b(true|True|false|False)\\b"
+		}
+	},
+	"scopeName": "source.aub"
+}

@@ -1,0 +1,25 @@
+{
+  "name": "aublang",
+  "displayName": "AubLang",
+  "description": "Syntax highlighting for AubLang",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [{
+      "id": "aublang",
+      "aliases": ["AubLang", "aublang"],
+      "extensions": [".aub"],
+      "configuration": "./language-configuration.json"
+    }],
+    "grammars": [{
+      "language": "aublang",
+      "scopeName": "source.aub",
+      "path": "./syntaxes/aublang.tmLanguage.json"
+    }]
+  }
+}
