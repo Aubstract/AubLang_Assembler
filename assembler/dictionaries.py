@@ -1,30 +1,30 @@
 # ------------------FUNCTIONS------------------------
 # These are essentially getter functions
 
-def opToBin(opcode: str) -> str:
+def opcode_to_binary(opcode: str) -> str:
     """Converts an opcode mnemonic to binary"""
-    return getBin(opDict[opcode],5)
+    return get_binary(opDict[opcode],5)
 
 
-def addrToBin(address: str, digits: int) -> str:
+def address_to_binary(address: str, digits: int) -> str:
     """Converts an address mnemonic to a binary number"""
-    return getBin(addrDict[address],digits)
+    return get_binary(addrDict[address],digits)
 
 
-def litToBin(literal: str) -> str:
+def literal_to_binary(literal: str) -> str:
     """Converts a literal to binary"""
 
     literal = literal.strip("'")
 
     if literal.lstrip("-").isnumeric():
-        literal = getBin(int(literal),8)
+        literal = get_binary(int(literal),8)
     else:
-        literal = getBin(charDict[literal],8)
+        literal = get_binary(charDict[literal],8)
 
     return literal
 
 
-def cntrlToBin(control: str) -> str:
+def control_char_to_binary(control: str) -> str:
     """Converts a control mnemonic into binary"""
     
     if control in {"true", "True"}:
@@ -36,7 +36,7 @@ def cntrlToBin(control: str) -> str:
 
 
 # From: https://stackoverflow.com/questions/12946116/twos-complement-binary-in-python
-def getBin(n: int, bits: int) -> str:
+def get_binary(n: int, bits: int) -> str:
     """Converts n to binary, and fills w/ 0 till the output has 'bits' digits"""
     s = bin(n & int("1"*bits, 2))[2:]
     return ("{0:0>%s}" % (bits)).format(s)

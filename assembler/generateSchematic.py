@@ -2,7 +2,7 @@ import os
 import mcschematic
 
 
-def binToSchem(code: list[object]):
+def bin_to_schem(code: list[object]):
     """Generates a schematic file"""
 
     # Initialize CONSTS and vars -------------------------------------------

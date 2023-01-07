@@ -15,12 +15,12 @@ import postProcess
 
 def main():
     # Get source file (.aub or .txt) and parse it into a list of strings line by line
-    source, args = preProcess.getInput()
+    source, args = preProcess.get_input()
 
     # Take the list of strings and translate it into a list of Lines,
     # where a Line object stores the contents of the string, and the
     # line number (the index + 1), this is used later in debugging
-    lines = preProcess.constructLines(source)
+    lines = preProcess.construct_lines(source)
     
     # Delete comments, empty lines, whitespace, etc
     cleanLines = preProcess.sanitize(lines)
@@ -30,7 +30,7 @@ def main():
     debug.debug(cleanLines)
 
     # Replace labels (variables / jump labels) with their literal addresses
-    noLabels = assemble.replaceLabels(cleanLines)
+    noLabels = assemble.replace_labels(cleanLines)
 
     # Check to make sure there arent any arguments left that arent literal addresses
     debug.debugLiteral(noLabels)
@@ -43,7 +43,7 @@ def main():
     debug.debugMachineCode(machineCode)
 
     # Use the binary to generate a schematic to paste into Minecraft
-    schem.binToSchem(machineCode)
+    schem.bin_to_schem(machineCode)
 
     # Print a report
     postProcess.postProcess(args, assembly, machineCode)

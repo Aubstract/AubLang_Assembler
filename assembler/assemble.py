@@ -2,7 +2,7 @@
 import dictionaries as dict
 
 
-def replaceLabels(code: list[object]) -> list[object]:
+def replace_labels(code: list[object]) -> list[object]:
     """Replaces labels with literal values/addresses"""
 
     # Adds all the variable and jump label names to dictionaries
@@ -53,46 +53,47 @@ def assemble(code: list[object]) -> list[object]:
         line = lineElement.line
         fields = line.split()
 
-        if fields[0] in {"add","adc","sub","sbc","and","orr","xor","nnd","nor","xnr","jgt","jet","jlt","jge"}:
-            opCode = dict.opToBin(fields[0])
-            operand1 = dict.addrToBin(fields[1], 5)
-            operand2 = dict.addrToBin(fields[2], 5)
-            operand3 = dict.addrToBin(fields[3], 2)
-            control = dict.cntrlToBin(fields[4])
+        if fields[0] in {"add","adc","sub","sbc","and","orr","xor",
+                         "nnd","nor","xnr","jgt","jet","jlt","jge"}:
+            opCode = dict.opcode_to_binary(fields[0])
+            operand1 = dict.address_to_binary(fields[1], 5)
+            operand2 = dict.address_to_binary(fields[2], 5)
+            operand3 = dict.address_to_binary(fields[3], 2)
+            control = dict.control_char_to_binary(fields[4])
             code[lineNum].line = opCode + operand1 + operand2 + operand3 + control
 
         elif fields[0] == "jft":
-            opCode = dict.opToBin(fields[0])
-            operand1 = dict.addrToBin(fields[1], 5)
+            opCode = dict.opcode_to_binary(fields[0])
+            operand1 = dict.address_to_binary(fields[1], 5)
             operand2 = fields[2].zfill(5)
             operand3 = "00"
-            control = dict.cntrlToBin(fields[3])
+            control = dict.control_char_to_binary(fields[3])
             code[lineNum].line = opCode + operand1 + operand2 + operand3 + control
 
         elif fields[0] == "lit":
-            opCode = dict.opToBin(fields[0])
-            operand1 = dict.addrToBin(fields[1], 5)
-            operand2 = dict.litToBin(fields[2])
+            opCode = dict.opcode_to_binary(fields[0])
+            operand1 = dict.address_to_binary(fields[1], 5)
+            operand2 = dict.literal_to_binary(fields[2])
             code[lineNum].line = opCode + operand1 + operand2
 
         elif fields[0] in {"inc","dec"}:
-            opCode = dict.opToBin(fields[0])
-            operand1 = dict.addrToBin(fields[1], 5)
-            operand2 = dict.addrToBin(fields[2], 5)
+            opCode = dict.opcode_to_binary(fields[0])
+            operand1 = dict.address_to_binary(fields[1], 5)
+            operand2 = dict.address_to_binary(fields[2], 5)
             operand3 = "00"
-            control = dict.cntrlToBin(fields[3])
+            control = dict.control_char_to_binary(fields[3])
             code[lineNum].line = opCode + operand1 + operand2 + operand3 + control
 
         elif fields[0] == "jmp":
-            opCode = dict.opToBin(fields[0])
-            operand1 = dict.addrToBin(fields[1], 5)
+            opCode = dict.opcode_to_binary(fields[0])
+            operand1 = dict.address_to_binary(fields[1], 5)
             operand2 = "00000"
             operand3 = "00"
-            control = dict.cntrlToBin(fields[2])
+            control = dict.control_char_to_binary(fields[2])
             code[lineNum].line = opCode + operand1 + operand2 + operand3 + control
 
         elif fields[0] in {"ret","hlt"}:
-            opCode = dict.opToBin(fields[0])
+            opCode = dict.opcode_to_binary(fields[0])
             operand1 = "00000"
             operand2 = "00000"
             operand3 = "00"
@@ -100,15 +101,15 @@ def assemble(code: list[object]) -> list[object]:
             code[lineNum].line = opCode + operand1 + operand2 + operand3 + control
 
         elif fields[0] == "mov":
-            opCode = dict.opToBin(fields[0])
-            operand1 = dict.addrToBin(fields[1], 5)
-            operand2 = dict.addrToBin(fields[2], 5)
+            opCode = dict.opcode_to_binary(fields[0])
+            operand1 = dict.address_to_binary(fields[1], 5)
+            operand2 = dict.address_to_binary(fields[2], 5)
             operand3 = "00"
             control = "0"
             code[lineNum].line = opCode + operand1 + operand2 + operand3 + control
 
         elif fields[0] in {"nop","suf","cuf"}:
-            opCode = dict.opToBin(fields[0])
+            opCode = dict.opcode_to_binary(fields[0])
             operand1 = "00000"
             operand2 = "00000"
             operand3 = "00"

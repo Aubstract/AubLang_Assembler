@@ -1,18 +1,18 @@
 import dictionaries as dict
 
 
-def postProcess(args: list[str], assembly: list[object], machineCode: list[object]) -> None:
+def post_process(args: list[str], assembly: list[object], machineCode: list[object]) -> None:
     print("\n~~~~~~~~~~~~~~~~~~~~ successfully assembled ~~~~~~~~~~~~~~~~~~~~\n")
     print("Output file name: output.schem")
     print(f"Program length: {len(machineCode)} lines\n")
 
     if "print" in args:
         if "label" in args or "all" in args:
-            printLabels()
+            print_labels()
         if "aub" in args or "all" in args:
-            printAssembly(assembly)
+            print_assembly_code(assembly)
         if "bin" in args or "all" in args:
-            printMachineCode(machineCode)
+            print_machine_code(machineCode)
     elif "file" in args:
         if "label" in args or "all" in args:
             pass
@@ -26,7 +26,7 @@ def postProcess(args: list[str], assembly: list[object], machineCode: list[objec
     print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n")
 
 
-def printLabels() -> None:
+def print_labels() -> None:
     print("Label Dictionaries: -------------------------------------------------\n")
     print("\t-Jump Labels:")
     for label in dict.jumpLabels:
@@ -38,14 +38,14 @@ def printLabels() -> None:
     print("")
 
 
-def printAssembly(assembly: list[object]) -> None:
+def print_assembly_code(assembly: list[object]) -> None:
     print("Assembly Code: ------------------------------------------------------\n")
     for i, line in enumerate(assembly):
         print(f"\t{i+1}\t{line.line}")
     print("")
 
 
-def printMachineCode(code: list[object]) -> None:
+def print_machine_code(code: list[object]) -> None:
     print("Machine Code: ------------------------------------------------------\n")
     for i, line in enumerate(code):
         print(f"\t{i+1}\t", end="")

@@ -8,18 +8,18 @@ class Line:
 
 
 # ----------------FUNCTIONS------------------------
-def getInput() -> tuple[list[str],list[str]]:
+def get_input() -> tuple[list[str],list[str]]:
     """Gets the contents of a source file, and a list of compiler arguments. (in that order)"""
-    code = getSource()
-    args = getArgs()
+    code = get_source()
+    args = get_args()
 
     return code, args
 
 
-def getSource() -> list[str]:
+def get_source() -> list[str]:
     """Gets a  a text file line by line into a list"""
 
-    filePath = getFilePath()
+    filePath = get_file_path()
 
     with open(filePath, "r") as file:
         contents = file.readlines()
@@ -27,7 +27,7 @@ def getSource() -> list[str]:
     return contents
 
 
-def getFilePath() -> str:
+def get_file_path() -> str:
     """Prompts user for a file path"""
 
     filePath = input("\nEnter the path to the source file: ")
@@ -38,7 +38,7 @@ def getFilePath() -> str:
     return filePath
 
 
-def getArgs() -> list[str]:
+def get_args() -> list[str]:
     """Gets a list of compiler arguments from user and checks their validity"""
     validArgs = False
 
@@ -60,7 +60,7 @@ def getArgs() -> list[str]:
     return args
 
 
-def constructLines(code: list[str]) -> list[object]:
+def construct_lines(code: list[str]) -> list[object]:
     """Takes a list of strings and creates a list of objects, each with two attributes:\n
        - The line of code (str)\n
        - The line number (int)\n
