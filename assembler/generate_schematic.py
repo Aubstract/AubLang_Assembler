@@ -2,7 +2,7 @@ import os
 import mcschematic
 
 
-def bin_to_schem(code: list[object]):
+def bin_to_schem(machine_code: list[object]):
     """Generates a schematic file"""
 
     # Initialize CONSTS and vars -------------------------------------------
@@ -46,29 +46,29 @@ def bin_to_schem(code: list[object]):
     schem = mcschematic.MCSchematic()
 
     # Breaks each line into a list of chars
-    for lineNum, lineElement in enumerate(code):
-        line = lineElement.line
-        code[lineNum].line = [*line]
+    for index, line_object in enumerate(machine_code):
+        line = line_object.line
+        machine_code[index].line = [*line]
 
-    totalRows = len(code)
-    rowCount = 0
-    colCount = 0
+    total_rows = len(machine_code)
+    row_count = 0
+    col_count = 0
 
     for y_coord in range(y_start, y_end, y_step):
         for x_coord in range(x_start, x_end, x_step):
             for z_coord in range(z_start, z_end, z_step):
-                if rowCount < totalRows:
-                    line = code[rowCount].line
-                    if line[colCount] == '1':
+                if row_count < total_rows:
+                    line = machine_code[row_count].line
+                    if line[col_count] == '1':
                         schem.setBlock((x_coord, y_coord, z_coord), f"minecraft:redstone_wall_torch[facing={TORCH_DIRECTION}]")
                     else:
                         schem.setBlock((x_coord, y_coord, z_coord), "minecraft:barrier")
-                elif rowCount >= totalRows and rowCount < 32:
+                elif row_count >= total_rows and row_count < 32:
                     schem.setBlock((x_coord, y_coord, z_coord), "minecraft:barrier")
                 else:
                     break
-                colCount += 1
-            colCount = 0
-            rowCount += 1
+                col_count += 1
+            col_count = 0
+            row_count += 1
 
     schem.save(f"C:/Users/{USERNAME}/AppData/Roaming/.minecraft/config/worldedit/schematics", "output", mcschematic.Version.JE_1_18_2)

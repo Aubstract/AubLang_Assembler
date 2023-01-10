@@ -2,9 +2,9 @@ import dictionaries as dict
 
 # ----------------CLASSES-------------------------
 class Line:
-    def __init__(self, lineArg: str, lineNumArg: int):
-        self.line = lineArg
-        self.line_num = lineNumArg
+    def __init__(self, line_arg: str, line_num_arg: int):
+        self.line = line_arg
+        self.line_num = line_num_arg
 
 
 # ----------------FUNCTIONS------------------------
@@ -19,9 +19,9 @@ def get_input() -> tuple[list[str],list[str]]:
 def get_source() -> list[str]:
     """Gets a  a text file line by line into a list"""
 
-    filePath = get_file_path()
+    file_path = get_file_path()
 
-    with open(filePath, "r") as file:
+    with open(file_path, "r") as file:
         contents = file.readlines()
 
     return contents
@@ -30,32 +30,32 @@ def get_source() -> list[str]:
 def get_file_path() -> str:
     """Prompts user for a file path"""
 
-    filePath = input("\nEnter the path to the source file: ")
+    file_path = input("\nEnter the path to the source file: ")
 
-    if filePath.startswith('"') and filePath.endswith('"'):
-        filePath = filePath[1:1]
+    if file_path.startswith('"') and file_path.endswith('"'):
+        file_path = file_path[1:1]
 
-    return filePath
+    return file_path
 
 
 def get_args() -> list[str]:
     """Gets a list of compiler arguments from user and checks their validity"""
-    validArgs = False
+    valid_args = False
 
-    while not validArgs:
+    while not valid_args:
         line = input("Enter compiler arguments (blank=default): ")
         args = line.split()
 
         if len(args) == 0:
-            validArgs = True
+            valid_args = True
         else:
             for argument in args:
-                if argument not in dict.argSet:
-                    validArgs = False
+                if argument not in dict.ARG_SET:
+                    valid_args = False
                     print("Invalid arguments, please try again")
                     break
                 else:
-                    validArgs = True
+                    valid_args = True
 
     return args
 
@@ -66,8 +66,8 @@ def construct_lines(code: list[str]) -> list[object]:
        - The line number (int)\n
        This allows the debugger to specify the line number in an error message"""
 
-    for lineNum, line in enumerate(code):
-        code[lineNum] = Line(line, lineNum)
+    for line_num, line in enumerate(code):
+        code[line_num] = Line(line, line_num)
     
     return code
 
@@ -75,9 +75,9 @@ def construct_lines(code: list[str]) -> list[object]:
 def sanitize(code: list[object]) -> list[object]:
     """Eliminates comments, empty lines, tabs, double spaces, etc"""
 
-    for lineNum, lineElement in reversed(list(enumerate(code))):
+    for line_num, line_object in reversed(list(enumerate(code))):
 
-        line = lineElement.line
+        line = line_object.line
 
         line = line.replace("\t", "")
         line = line.replace("  ", " ")
@@ -90,8 +90,8 @@ def sanitize(code: list[object]) -> list[object]:
             line = line[: line.index("\n")]
         
         if len(line) == 0:
-            code.pop(lineNum)
+            code.pop(line_num)
         else:
-            code[lineNum].line = line
+            code[line_num].line = line
 
     return code

@@ -3,12 +3,12 @@
 
 def opcode_to_binary(opcode: str) -> str:
     """Converts an opcode mnemonic to binary"""
-    return get_binary(opDict[opcode],5)
+    return get_binary(OPCODE_DICT[opcode],5)
 
 
 def address_to_binary(address: str, digits: int) -> str:
     """Converts an address mnemonic to a binary number"""
-    return get_binary(addrDict[address],digits)
+    return get_binary(ADDRESS_DICT[address],digits)
 
 
 def literal_to_binary(literal: str) -> str:
@@ -19,31 +19,32 @@ def literal_to_binary(literal: str) -> str:
     if literal.lstrip("-").isnumeric():
         literal = get_binary(int(literal),8)
     else:
-        literal = get_binary(charDict[literal],8)
+        literal = get_binary(CHAR_DICT[literal],8)
 
     return literal
 
 
-def control_char_to_binary(control: str) -> str:
+def control_char_to_binary(control_char: str) -> str:
     """Converts a control mnemonic into binary"""
     
-    if control in {"true", "True"}:
-        control = "1"
+    if control_char in {"true", "True"}:
+        control_char = "1"
     else:
-        control = "0"
+        control_char = "0"
 
-    return control
+    return control_char
 
 
 # From: https://stackoverflow.com/questions/12946116/twos-complement-binary-in-python
 def get_binary(n: int, bits: int) -> str:
-    """Converts n to binary, and fills w/ 0 till the output has 'bits' digits"""
+    """Converts 'n' to binary, and fills w/ 0 till the output has 'bits' digits"""
     s = bin(n & int("1"*bits, 2))[2:]
     return ("{0:0>%s}" % (bits)).format(s)
 
 
+
 # ---------------------SETS-----------------------------
-argSet = {
+ARG_SET = {
     "print",
     "file",
     "aub",
@@ -52,11 +53,15 @@ argSet = {
     "all"
 }
 
-# ------------------DICTIONARIES------------------------
-jumpLabels = {}
-varLabels = {}
 
-opDict = {
+
+# -------------VARIABLE DICTIONARIES--------------------
+jump_labels = {}
+var_labels = {}
+
+
+# -------------CONSTANT DICTIONARIES--------------------
+OPCODE_DICT = {
     "nop" : 0,
     "add" : 1,
     "adc" : 2,
@@ -85,7 +90,7 @@ opDict = {
 }
 
 
-addrDict = {
+ADDRESS_DICT = {
     "r0" : 0,
     "r1" : 1,
     "r2" : 2,
@@ -137,7 +142,7 @@ addrDict = {
 }
 
 
-charDict = {
+CHAR_DICT = {
     "0" : 0,
     "1" : 1,
     "2" : 2,

@@ -1,18 +1,18 @@
 import dictionaries as dict
 
 
-def post_process(args: list[str], assembly: list[object], machineCode: list[object]) -> None:
+def post_process(args: list[str], assembly_code: list[object], machine_code: list[object]) -> None:
     print("\n~~~~~~~~~~~~~~~~~~~~ successfully assembled ~~~~~~~~~~~~~~~~~~~~\n")
     print("Output file name: output.schem")
-    print(f"Program length: {len(machineCode)} lines\n")
+    print(f"Program length: {len(machine_code)} lines\n")
 
     if "print" in args:
         if "label" in args or "all" in args:
             print_labels()
         if "aub" in args or "all" in args:
-            print_assembly_code(assembly)
+            print_assembly_code(assembly_code)
         if "bin" in args or "all" in args:
-            print_machine_code(machineCode)
+            print_machine_code(machine_code)
     elif "file" in args:
         if "label" in args or "all" in args:
             pass
@@ -29,26 +29,26 @@ def post_process(args: list[str], assembly: list[object], machineCode: list[obje
 def print_labels() -> None:
     print("Label Dictionaries: -------------------------------------------------\n")
     print("\t-Jump Labels:")
-    for label in dict.jumpLabels:
-        print(f"\t\t{label} : {dict.jumpLabels[label]}")
+    for label in dict.jump_labels:
+        print(f"\t\t{label} : {dict.jump_labels[label]}")
     print("")
     print("\t-Variable Labels:")
-    for label in dict.varLabels:
-        print(f"\t\t{label} : {dict.varLabels[label]}")
+    for label in dict.var_labels:
+        print(f"\t\t{label} : {dict.var_labels[label]}")
     print("")
 
 
 def print_assembly_code(assembly: list[object]) -> None:
     print("Assembly Code: ------------------------------------------------------\n")
-    for i, line in enumerate(assembly):
-        print(f"\t{i+1}\t{line.line}")
+    for index, line_object in enumerate(assembly):
+        print(f"\t{index+1}\t{line_object.line}")
     print("")
 
 
 def print_machine_code(code: list[object]) -> None:
     print("Machine Code: ------------------------------------------------------\n")
-    for i, line in enumerate(code):
-        print(f"\t{i+1}\t", end="")
-        for bit in line.line:
+    for index, line_object in enumerate(code):
+        print(f"\t{index+1}\t", end="")
+        for bit in line_object.line:
             print(bit, end="")
         print("")

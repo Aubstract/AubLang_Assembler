@@ -23,30 +23,30 @@ def main():
     lines = pre_process.construct_lines(source)
     
     # Delete comments, empty lines, whitespace, etc
-    cleanLines = pre_process.sanitize(lines)
+    clean_lines = pre_process.sanitize(lines)
 
     # debug() looks for syntax errors, valid arguments, etc and
     # prints an error message if an issue comes up
-    debug.debug(cleanLines)
+    debug.debug(clean_lines)
 
     # Replace labels (variables / jump labels) with their literal addresses
-    noLabels = assemble.replace_labels(cleanLines)
+    no_labels = assemble.replace_labels(clean_lines)
 
     # Check to make sure there arent any arguments left that arent literal addresses
-    debug.debug_literal(noLabels)
+    debug.debug_literal(no_labels)
 
     # Create a second list of the assembly code for use in postProcess (printing etc)
-    assembly = copy.deepcopy(noLabels)
+    assembly = copy.deepcopy(no_labels)
 
     # Convert to binary, then make sure the binary is valid
-    machineCode = assemble.assemble(noLabels)
-    debug.debug_machine_code(machineCode)
+    machine_code = assemble.assemble(no_labels)
+    debug.debug_machine_code(machine_code)
 
     # Use the binary to generate a schematic to paste into Minecraft
-    schem.bin_to_schem(machineCode)
+    schem.bin_to_schem(machine_code)
 
     # Print a report
-    post_process.post_process(args, assembly, machineCode)
+    post_process.post_process(args, assembly, machine_code)
 
 
 main()
