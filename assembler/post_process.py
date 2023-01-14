@@ -1,7 +1,8 @@
 import dictionaries as dict
+from pre_process import Line
 
 
-def post_process(args: list[str], assembly_code: list[object], machine_code: list[object]) -> None:
+def post_process(args: list[str], assembly_code: list[Line], machine_code: list[Line]) -> None:
     print("\n~~~~~~~~~~~~~~~~~~~~ successfully assembled ~~~~~~~~~~~~~~~~~~~~\n")
     print("Output file name: output.schem")
     print(f"Program length: {len(machine_code)} lines\n")

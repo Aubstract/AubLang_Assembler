@@ -17,17 +17,16 @@ def main():
     # Get source file (.aub or .txt) and parse it into a list of strings line by line
     source, args = pre_process.get_input()
 
-    # Take the list of strings and translate it into a list of Lines,
-    # where a Line object stores the contents of the string, and the
-    # line number (the index + 1), this is used later in debugging
+    # Encapsulates the line number with the line contents (str)
     lines = pre_process.construct_lines(source)
     
     # Delete comments, empty lines, whitespace, etc
     clean_lines = pre_process.sanitize(lines)
 
-    # debug() looks for syntax errors, valid arguments, etc and
-    # prints an error message if an issue comes up
+    # debug() finds syntax errors, invalid arguments, etc and prints an error messages
     debug.debug(clean_lines)
+
+    # Tokenize?
 
     # Replace labels (variables / jump labels) with their literal addresses
     no_labels = assemble.replace_labels(clean_lines)
@@ -35,7 +34,7 @@ def main():
     # Check to make sure there arent any arguments left that arent literal addresses
     debug.debug_literal(no_labels)
 
-    # Create a second list of the assembly code for use in postProcess (printing etc)
+    # Create a second list of the assembly code for use in post_process (printing etc)
     assembly = copy.deepcopy(no_labels)
 
     # Convert to binary, then make sure the binary is valid

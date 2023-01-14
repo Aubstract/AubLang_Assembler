@@ -1,27 +1,16 @@
 
 import dictionaries as dict
+from pre_process import Line
 
 
-def replace_labels(code: list[object]) -> list[object]:
+def replace_labels(code: list[Line]) -> list[Line]:
     """Replaces labels with literal values/addresses"""
 
-    # Adds all the variable and jump label names to dictionaries
-    line_index = 0
-    for line_object in code:
+    collect_labels(code)
 
-        line = line_object.line
-        tokens = line.split()
+    code = remove_labels(code)
 
-        try:
-            if tokens[0] == "var":
-                dict.var_labels[tokens[1]] = tokens[2]
-                line_index -= 1
-            elif line[0] == "@":
-                dict.jump_labels[tokens[0]] = "$" + str(line_index)
-                line_index -= 1
-        except:
-                line_index -= 1
-        line_index += 1
+    code = replace_labels(code)
 
     # Pops label declaration lines and replaces labels with literals
     for index, line_object in reversed(list(enumerate(code))):
@@ -46,7 +35,39 @@ def replace_labels(code: list[object]) -> list[object]:
     return code
 
 
-def assemble(code: list[object]) -> list[object]:
+def collect_labels(code: list[Line]) -> None:
+    # Adds all the variable and jump label names to dictionaries
+    line_index = 0
+    for line_object in code:
+
+        line = line_object.line
+        tokens = line.split()
+
+        if tokens[0] == "var":
+            dict.var_labels[tokens[1]] = tokens[2]
+            line_index -= 1
+        elif line[0] == "@":
+            dict.jump_labels[tokens[0]] = "$" + str(line_index)
+            line_index -= 1
+
+        line_index += 1
+
+
+def remove_labels(code: list[Line]) -> list[Line]:
+    # Pops label declaration lines and replaces labels with literals
+    for index, line_object in reversed(list(enumerate(code))):
+
+        line = line_object.line
+        
+        if line.startswith("var"):
+            code.pop(index)
+        elif line.startswith("@"):
+            code.pop(index)
+
+    return code
+
+
+def assemble(code: list[Line]) -> list[Line]:
     """Converts assembly into machine code"""
     for line_object in code:
 

@@ -1,11 +1,12 @@
 import dictionaries as dict
+from pre_process import Line
 
 
 MAX_PROGRAM_LEN = 32 # Max number of instructions allowed in the program
 INSTRUCTION_WIDTH = 18 # Number of bits per instruction
 
 
-def debug(code: list[object]):
+def debug(code: list[Line]):
     """Checks that the instructions are formatted correctly and have valid arguments"""
 
     for line_object in code:
@@ -95,7 +96,7 @@ def debug(code: list[object]):
             print_error(invalid_operation(line_num, line))
 
 
-def debug_literal(code: list[object]):
+def debug_literal(code: list[Line]):
     """Checks that all literal addresses are valid"""
 
     if len(code) > MAX_PROGRAM_LEN:
@@ -149,7 +150,7 @@ def debug_literal(code: list[object]):
                     print_error(invalid_literal_address(line, line_num))
 
 
-def debug_machine_code(code: list[object]):
+def debug_machine_code(code: list[Line]):
     """Checks that the machine code is valid"""
 
     # In the event of a wierd edge case, this is a last check of validity

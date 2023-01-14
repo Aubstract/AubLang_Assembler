@@ -1,8 +1,9 @@
 import os
 import mcschematic
+from pre_process import Line
 
 
-def bin_to_schem(machine_code: list[object]):
+def bin_to_schem(machine_code: list[Line]):
     """Generates a schematic file"""
 
     # Initialize CONSTS and vars -------------------------------------------

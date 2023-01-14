@@ -2,10 +2,10 @@
 # By Aubrey Fields
 # 9/24/2022
 
-# a / b = c , r
+# a / b = q , r
 # a = dividend
 # b = divisor
-# c = quotent
+# q = quotent
 # r = remainder
 
 # Variable address assignments

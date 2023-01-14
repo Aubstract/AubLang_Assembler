@@ -16,7 +16,7 @@ def literal_to_binary(literal: str) -> str:
 
     literal = literal.strip("'")
 
-    if literal.lstrip("-").isnumeric():
+    if literal.strip("-").isnumeric():
         literal = get_binary(int(literal),8)
     else:
         literal = get_binary(CHAR_DICT[literal],8)
