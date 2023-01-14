@@ -1,11 +1,11 @@
 import dictionaries as dict
 from pre_process import Line
-import aublang_assembler.emulator.run as emulator
+import emulator.run as emulator
 
 
 def post_process(args: list[str], assembly_code: list[Line], machine_code: list[Line]) -> None:
     if "run" in args:
-        emulator.run(assembly_code)
+        emulator.run.run(assembly_code)
     else:
         print("\n~~~~~~~~~~~~~~~~~~~~ successfully assembled ~~~~~~~~~~~~~~~~~~~~\n")
         print("Output file name: output.schem")

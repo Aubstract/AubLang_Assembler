@@ -9,10 +9,10 @@
 
 
 import time
-import alu
-import memory
-import display
-import stats
+import emulator.alu as alu
+import emulator.memory as mem
+import emulator.display as disp
+import emulator.stats as stats
 
 
 def run(assembly: list[object]):
@@ -21,13 +21,15 @@ def run(assembly: list[object]):
     cycle_length = 1 / cycles_per_second
     stop_program = False
 
+    disp.init_display() # Kind of just a placeholder
+
     # Main loop
     while not stop_program:
         # Start timing clock cycle
         cycle_start = time.perf_counter()
 
         # Operation
-        instruction = memory.get_instruction()
+        instruction = mem.get_instruction()
         if instruction == "hlt":
             stop_program = True
         else:

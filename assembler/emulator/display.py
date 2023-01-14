@@ -1,8 +1,12 @@
 import curses
 
-stdscr = curses.initscr()
-pixel_on = chr(9608) # rectangle symbol
-pixel_off = ' '
+def init_display():
+    global stdscr
+    global pixel_on
+    global pixel_off
+    stdscr = curses.initscr()
+    pixel_on = chr(9608) # rectangle symbol
+    pixel_off = ' '
 
 def print_char() -> None:
     global stdscr

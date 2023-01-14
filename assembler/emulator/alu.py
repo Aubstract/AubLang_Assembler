@@ -1,5 +1,5 @@
-import memory as mem
-import display
+import emulator.memory as mem
+import emulator.display as disp
 
 def operate(instruction: str):
     # Tokenize instruction
