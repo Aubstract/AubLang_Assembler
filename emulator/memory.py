@@ -347,7 +347,7 @@ def get_general_register(address: str) -> int:
 def get_ram(address: str) -> int:
     return ram[address]
 
-def get_prom() -> str:
+def get_instruction() -> str:
     address = get_program_counter()
     numerical_address = int("".join((re.findall("\\$(\\d+)", address))))
     return prom[numerical_address].line

@@ -7,30 +7,8 @@ def replace_labels(code: list[Line]) -> list[Line]:
     """Replaces labels with literal values/addresses"""
 
     collect_labels(code)
-
     code = remove_labels(code)
-
-    code = replace_labels(code)
-
-    # Pops label declaration lines and replaces labels with literals
-    for index, line_object in reversed(list(enumerate(code))):
-
-        line = line_object.line
-        
-        if line.startswith("var"):
-            code.pop(index)
-        elif line.startswith("@"):
-            code.pop(index)
-        else:
-            tokens = line.split()
-
-            for index, field in enumerate(tokens):
-                if field in dict.var_labels:
-                    tokens[index] = dict.var_labels[field]
-                elif field in dict.jump_labels:
-                    tokens[index] = dict.jump_labels[field]
-            line = ' '.join(tokens)
-            line = line
+    code = replace_with_literals(code)
 
     return code
 
@@ -63,6 +41,21 @@ def remove_labels(code: list[Line]) -> list[Line]:
             code.pop(index)
         elif line.startswith("@"):
             code.pop(index)
+
+    return code
+
+
+def replace_with_literals(code: list[Line]) -> list[Line]:
+    for line_object in code:
+        line = line_object.line
+        tokens = line.split()
+
+        for index, token in enumerate(tokens):
+            if token in dict.var_labels:
+                tokens[index] = dict.var_labels[token]
+            elif token in dict.jump_labels:
+                tokens[index] = dict.jump_labels[token]
+        line = ' '.join(tokens)
 
     return code
 

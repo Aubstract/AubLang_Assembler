@@ -1,30 +1,34 @@
 import dictionaries as dict
 from pre_process import Line
+import aublang_assembler.emulator.run as emulator
 
 
 def post_process(args: list[str], assembly_code: list[Line], machine_code: list[Line]) -> None:
-    print("\n~~~~~~~~~~~~~~~~~~~~ successfully assembled ~~~~~~~~~~~~~~~~~~~~\n")
-    print("Output file name: output.schem")
-    print(f"Program length: {len(machine_code)} lines\n")
+    if "run" in args:
+        emulator.run(assembly_code)
+    else:
+        print("\n~~~~~~~~~~~~~~~~~~~~ successfully assembled ~~~~~~~~~~~~~~~~~~~~\n")
+        print("Output file name: output.schem")
+        print(f"Program length: {len(machine_code)} lines\n")
 
-    if "print" in args:
-        if "label" in args or "all" in args:
-            print_labels()
-        if "aub" in args or "all" in args:
-            print_assembly_code(assembly_code)
-        if "bin" in args or "all" in args:
-            print_machine_code(machine_code)
-    elif "file" in args:
-        if "label" in args or "all" in args:
-            pass
-        if "aub" in args or "all" in args:
-            pass
-        if "bin" in args or "all" in args:
-            pass
-    elif len(args) != 0:
-        print("Insufficient arguments, no printing or saving of data executed.")
+        if "print" in args:
+            if "label" in args or "all" in args:
+                print_labels()
+            if "aub" in args or "all" in args:
+                print_assembly_code(assembly_code)
+            if "bin" in args or "all" in args:
+                print_machine_code(machine_code)
+        elif "file" in args:
+            if "label" in args or "all" in args:
+                pass
+            if "aub" in args or "all" in args:
+                pass
+            if "bin" in args or "all" in args:
+                pass
+        elif len(args) != 0:
+            print("Insufficient arguments, no printing or saving of data executed.")
 
-    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n")
+        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n")
 
 
 def print_labels() -> None:

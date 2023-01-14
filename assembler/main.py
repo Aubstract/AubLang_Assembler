@@ -31,6 +31,9 @@ def main():
     # Replace labels (variables / jump labels) with their literal addresses
     no_labels = assemble.replace_labels(clean_lines)
 
+    for line in no_labels:
+        print(line)
+
     # Check to make sure there arent any arguments left that arent literal addresses
     debug.debug_literal(no_labels)
 
@@ -44,7 +47,7 @@ def main():
     # Use the binary to generate a schematic to paste into Minecraft
     schem.bin_to_schem(machine_code)
 
-    # Print a report
+    # Print a report or run emulator
     post_process.post_process(args, assembly, machine_code)
 
 

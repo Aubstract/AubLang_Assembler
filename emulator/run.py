@@ -27,7 +27,7 @@ def run(assembly: list[object]):
         cycle_start = time.perf_counter()
 
         # Operation
-        instruction = memory.get_prom()
+        instruction = memory.get_instruction()
         if instruction == "hlt":
             stop_program = True
         else:
