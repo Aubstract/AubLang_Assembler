@@ -329,7 +329,10 @@ def get_memory(address: str) -> int:
 def get_program_counter() -> str:
     return program_counter
 
-def get_flag_register(position: int) -> int:
+def get_flag_register() -> list[int]:
+    return flag_register
+    
+def get_flag(position: int) -> int:
     return flag_register[position]
 
 def get_return_register() -> str:
@@ -349,6 +352,8 @@ def get_ram(address: str) -> int:
 
 def get_instruction() -> str:
     address = get_program_counter()
+    # what about:
+    # numerical_address = int(address[1:])
     numerical_address = int("".join((re.findall("\\$(\\d+)", address))))
     return prom[numerical_address].line
 
@@ -363,7 +368,7 @@ def set_memory(address: str, value: int) -> None:
     else:
         set_ram(address, value)
 
-def set_program_counter(address: int) -> None:
+def set_program_counter(address: str) -> None:
     global program_counter
     program_counter = address
 
