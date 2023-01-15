@@ -7,7 +7,7 @@ var a r0
 var b r1
 var c r2
 
-# Initialize the variables with the first two terms of the Fib sequence
+# First two terms of the Fib sequence
 lit a 0
 lit b 1
 
@@ -15,10 +15,10 @@ lit b 1
 mov bcd a
 mov bcd b
 
-# Add a to b, test to see if sum > 255, if so jump to @halt,
-# else continue, print sum, move vars around, loop back to @mainLoop
+# Add a + b, if sum > 255 jump to @halt,
+# else print sum, swap values, and loop
 @mainLoop
-	add c a b true # Flag register will eventually read: 1,0,0 (carry, zero, negative)
+	add c a b true
 	jft @halt 1000 false # Jump if overflow
 	mov bcd c
 	mov a b
