@@ -61,30 +61,39 @@ def operate(instruction: str):
 def add(tokens: list[str]):
     sum = mem.get_memory(tokens[2]) + mem.get_memory(tokens[3])
     mem.set_memory(tokens[1], sum)
-    if tokens[4] == "True":
+    if tokens[4] in {"true", "True"}:
         mem.set_flag_register(sum)
 
 
 def adc(tokens: list[str]):
     sum = int(tokens[2]) + int(tokens[3]) + 1
     mem.set_memory(tokens[1], sum)
-    if tokens[4] == "True":
+    if tokens[4] in {"true", "True"}:
         mem.set_flag_register(sum)
 
 def inc(tokens: list[str]):
     sum = int(tokens[2]) + 1
     mem.set_memory(tokens[1], sum)
-    if tokens[3] == "True":
+    if tokens[3] in {"true", "True"}:
         mem.set_flag_register(sum)
 
 def sub(tokens: list[str]):
-    pass
+    difference = mem.get_memory(tokens[2]) - mem.get_memory(tokens[3])
+    mem.set_memory(tokens[1], difference)
+    if tokens[4] in {"true", "True"}:
+        mem.set_flag_register(difference)
 
 def sbc(tokens: list[str]):
-    pass
+    difference = mem.get_memory(tokens[2]) - mem.get_memory(tokens[3]) - 1
+    mem.set_memory(tokens[1], difference)
+    if tokens[4] in {"true", "True"}:
+        mem.set_flag_register(difference)
 
 def dec(tokens: list[str]):
-    pass
+    difference = mem.get_memory(tokens[2]) - 1
+    mem.set_memory(tokens[1], difference)
+    if tokens[3] in {"true", "True"}:
+        mem.set_flag_register(difference)
 
 def and_(tokens: list[str]):
     pass
