@@ -96,13 +96,23 @@ def dec(tokens: list[str]):
         mem.set_flag_register(difference)
 
 def and_(tokens: list[str]):
-    pass
+    output = int(mem.get_memory(tokens[2])) & int(mem.get_memory(tokens[3]))
+    mem.set_memory(tokens[1], output)
+    if tokens[4] in {"true", "True"}:
+        mem.set_flag_register(output)
 
 def orr(tokens: list[str]):
-    pass
+    output = int(mem.get_memory(tokens[2])) | int(mem.get_memory(tokens[3]))
+    mem.set_memory(tokens[1], output)
+    if tokens[4] in {"true", "True"}:
+        mem.set_flag_register(output)
 
 def xor(tokens: list[str]):
-    pass
+    output = xor(int(mem.get_memory(tokens[2])), int(mem.get_memory(tokens[3])))
+    mem.set_memory(tokens[1], output)
+    if tokens[4] in {"true", "True"}:
+        mem.set_flag_register(output)
+
 
 def nnd(tokens: list[str]):
     pass
@@ -145,3 +155,7 @@ def mov(tokens: list[str]):
 
 def jge(tokens: list[str]):
     pass
+
+# Check that this works
+def xor(a, b):
+    return (a and not b) or (not a and b)
